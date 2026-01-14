@@ -42,7 +42,7 @@ const formattedDate = computed(() => {
   <div class="max-w-xl mx-auto px-6 py-12 flex flex-col items-center">
     <div class="relative mb-8">
       <div class="w-24 h-24 rounded-2xl overflow-hidden border-2 border-orange-500/50 shadow-[0_0_30px_rgba(249,115,22,0.2)] transform rotate-2 hover:rotate-0 transition-all duration-500">
-        <img src="/img/sintas2.png" alt="Profile" class="w-full h-full object-cover">
+        <img src="/img/S3t.png" alt="Profile" class="w-full h-full object-cover">
       </div>
     </div>
 
@@ -76,7 +76,7 @@ const formattedDate = computed(() => {
 
       <div v-else class="space-y-3">
         <NuxtLink v-for="link in data.links" :key="link.urut" :to="link.url"
-           class="group flex items-center p-3 glass-card btn-hover rounded-2xl transition-all duration-300">
+           class="group flex items-center p-3 glass-card btn-hover rounded-xl transition-all duration-300">
           
           <div class="flex-shrink-0 w-10 h-10 bg-orange-950/50 text-orange-400 border border-orange-900/50 rounded-xl flex items-center justify-center font-bold shadow-inner">
             {{ link.urut }}
@@ -94,6 +94,16 @@ const formattedDate = computed(() => {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </div>
+        </NuxtLink>
+      </div>
+
+      <div class="mt-8 w-full">
+        <NuxtLink to="/1" 
+          class="flex items-center justify-center gap-2 px-3 py-6 glass-card btn-hover text-[12px] text-slate-300 hover:text-orange-400 transition-colors tracking-[0.2em] uppercase border border-dashed border-slate-800 rounded-xl hover:border-orange-900/50">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          Internal Staff Only
         </NuxtLink>
       </div>
     </div>
