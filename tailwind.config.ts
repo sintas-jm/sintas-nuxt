@@ -16,7 +16,7 @@ export default {
         borderGrey: '#ddd'
       },
       fontFamily: {
-        sans: ['Montserrat', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       // Tip: Gunakan spacing atau extend screens untuk 1440
       maxWidth: {

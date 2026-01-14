@@ -42,12 +42,12 @@ const formattedDate = computed(() => {
   <div class="max-w-xl mx-auto px-6 py-12 flex flex-col items-center">
     <div class="relative mb-8">
       <div class="w-24 h-24 rounded-2xl overflow-hidden border-2 border-orange-500/50 shadow-[0_0_30px_rgba(249,115,22,0.2)] transform rotate-2 hover:rotate-0 transition-all duration-500">
-        <img src="https://lh3.googleusercontent.com/d/YOUR_IMAGE_ID" alt="Profile" class="w-full h-full object-cover">
+        <img src="/img/sintas2.png" alt="Profile" class="w-full h-full object-cover">
       </div>
     </div>
 
     <header class="text-center mb-8" v-if="data">
-      <h1 class="text-3xl md:text-5xl font-semibold tracking-tighter mb-2 text-transparent bg-clip-text bg-gradient-to-br from-white via-orange-200 to-orange-500">
+      <h1 class="text-xl md:text-2xl font-semibold tracking-[0.2em] mb-2 text-transparent bg-clip-text bg-gradient-to-br from-white via-orange-200 to-orange-500">
         {{ data.settings.namaApp }}
       </h1>
       <div class="flex items-center justify-center gap-2">

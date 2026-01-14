@@ -7,7 +7,9 @@
 <style>
 .linktree-layout {
   /* Pindahkan style gradient ke sini agar tidak merusak halaman lain */
-  background: radial-gradient(circle at top right, #5e4406 0%, #0f172a 40%, #020617 100%);
+  background: 
+  /* radial-gradient(circle at bottom, #5e4406 10%, #0f172a 40%, #020617 100%); */
+  linear-gradient(190deg, #020617 20%, #0f172a 60%, #5e4406 100%);
   background-attachment: fixed;
   color: #e2e8f0; /* text-slate-200 */
   font-family: 'Montserrat', sans-serif;
