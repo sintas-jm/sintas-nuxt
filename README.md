@@ -5,6 +5,9 @@ Sistem Integrasi Data Santri Matlabus Salik
 
 log update :
 
+v1.2.0
+  - add login page before dashboard staff only
+
 v1.1.0
   - add treelink staff only
   - full wide layout staff

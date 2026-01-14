@@ -26,12 +26,14 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-      // Properti di dalam sini hanya tersedia di Server-side
+      // Properti di dalam sini hanya tersedia di Server-side  // Variabel RAHASIA (Hanya bisa dibaca oleh folder server/)
       gasUrlBackend: process.env.GAS_URL_BACKEND, // Abaikan error merah jika masih muncul di editor
       
       // Jika ingin tersedia di Client-side juga, taruh di dalam 'public'
       public: {
         // data publik di sini
+        // Variabel PUBLIK (Bisa dibaca oleh browser & server)
+        // Kosongkan jika URL GAS tidak ingin diketahui publik sama sekali
       }
     },
   modules: [

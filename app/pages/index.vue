@@ -1,29 +1,3 @@
-<!--
-<template>
-  <section class="py-4">
-    <h1 class="text-2xl font-semibold mb-1">Selamat Datang</h1>
-    <p class="text-muted mb-6">Pusat layanan Sintas</p>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <NuxtLink to="/pendaftaran" class="group bg-white p-6 rounded-lg border border-borderGrey hover:border-primary transition-all shadow-sm">
-        <h3 class="font-semibold text-lg group-hover:text-primary transition-colors">Pendaftaran</h3>
-        <p class="text-sm text-muted">Form pendaftaran santri</p>
-      </NuxtLink>
-
-      <NuxtLink to="/presensi" class="group bg-white p-6 rounded-lg border border-borderGrey hover:border-primary transition-all shadow-sm">
-        <h3 class="font-semibold text-lg group-hover:text-primary transition-colors">Presensi</h3>
-        <p class="text-sm text-muted">Presensi pasca liburan</p>
-      </NuxtLink>
-
-      <NuxtLink to="/informasi" class="group bg-white p-6 rounded-lg border border-borderGrey hover:border-primary transition-all shadow-sm">
-        <h3 class="font-semibold text-lg group-hover:text-primary transition-colors">Informasi</h3>
-        <p class="text-sm text-muted">Jadwal & info harian</p>
-      </NuxtLink>
-    </div>
-  </section>
-</template>
--->
-
 <script setup>
 definePageMeta({
   layout: 'linktree' // <--- Pakai layout baru
@@ -98,7 +72,7 @@ const formattedDate = computed(() => {
       </div>
 
       <div class="mt-8 w-full">
-        <NuxtLink to="/1" 
+        <NuxtLink to="/internal" 
           class="flex items-center justify-center gap-2 px-3 py-6 glass-card btn-hover text-[12px] text-slate-300 hover:text-orange-400 transition-colors tracking-[0.2em] uppercase border border-dashed border-slate-800 rounded-xl hover:border-orange-900/50">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
