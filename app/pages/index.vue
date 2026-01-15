@@ -49,8 +49,7 @@ const formattedDate = computed(() => {
       </div>
 
       <div v-else class="space-y-3">
-        <NuxtLink v-for="link in data.links" :key="link.urut" :to="link.url"
-           class="group flex items-center p-3 glass-card btn-hover rounded-xl transition-all duration-300">
+        <NuxtLink v-for="link in data.links" :key="link.urut" :to="link.url" class="group flex items-center p-3 glass-card btn-hover rounded-xl transition-all duration-300">
           
           <div class="flex-shrink-0 w-10 h-10 bg-orange-950/50 text-orange-400 border border-orange-900/50 rounded-xl flex items-center justify-center font-bold shadow-inner">
             {{ link.urut }}

@@ -32,7 +32,7 @@ const handleLogin = async () => {
 
 <template>
   <div class="max-w-md mx-auto mt-20 px-6">
-    <div class="glass-card-admin p-10 rounded-[2rem] border-orange-500/20 text-center">
+    <div class="glass-card p-10 rounded-[2rem] border-orange-500/20 text-center">
       <div class="w-20 h-20 bg-orange-500/10 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-inner">
         <span class="text-4xl">🔑</span>
       </div>
@@ -49,8 +49,15 @@ const handleLogin = async () => {
           ⚠️ PIN tidak sesuai
         </div>
         
+        <!--
         <button @click="handleLogin" :disabled="isLoading"
-          class="w-full bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-orange-950/40 disabled:opacity-50">
+          class="w-full bg-orange-700/10 border border-orange-700/50 text-slate-300 font-bold py-4 rounded-2xl hover:border-1 hover:border-orange-500/50 hover:shadow-orange-700/30 hover:scale-105 hover:bg-orange-500/40 transition-all shadow-lg shadow-orange-950/40 disabled:opacity-50">
+          {{ isLoading ? 'MENGECEK...' : 'MASUK' }}
+        </button>
+        -->
+
+        <button @click="handleLogin" :disabled="isLoading"
+          class="w-full bg-gradient-to-r from-orange-600/60 to-orange-400/60 hover:from-orange-800/70 hover:to-orange-500/70   text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-orange-950/40 hover:scale-95 hover:text-slate-200/90 disabled:opacity-50">
           {{ isLoading ? 'MENGECEK...' : 'MASUK' }}
         </button>
       </div>

@@ -8,13 +8,17 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, statusMessage: 'Nama lengkap wajib diisi.' })
     }
 
-    // Kirim ke GAS
+    // Kirim ke GAS dengan menyertakan action pendaftaran
+    // Karena di doPost GAS kita buat default-nya adalah handlePendaftaranSantri,
+    // kita bisa mengirimkan body langsung atau memberikan action eksplisit.
     const response: any = await $fetch(config.gasUrlBackend, {
       method: 'POST',
-      body: body,
+      body: {
+        action: 'submitPendaftaran', // Opsional, sesuai default di doPost
+        ...body 
+      },
     })
 
-    // GAS mengembalikan { success: true/false, ... }
     if (response.success) {
       return {
         success: true,

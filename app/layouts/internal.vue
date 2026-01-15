@@ -1,13 +1,10 @@
 <script setup>
+const authCookie = useCookie('auth_pin')  // Ambil cookie auth_pin
+
+// tombol logout muncul jika user sudah login
 const logout = () => {
-  // Ambil cookie auth_pin
-  const authCookie = useCookie('auth_pin')
-  
-  // Hapus isi cookie (set jadi null)
-  authCookie.value = null
-  
-  // Tendang balik ke halaman login atau portal publik
-  navigateTo('/login')
+  authCookie.value = null  // Hapus isi cookie (set jadi null)
+  navigateTo('/')  // Tendang balik ke halaman login atau portal publik
 }
 </script>
 
@@ -22,15 +19,19 @@ const logout = () => {
           <span class="text-sm font-bold tracking-[0.3em] uppercase text-orange-200">Sintas</span>
         </NuxtLink>
 
-        <div class="flex items-center gap-6">
-          <NuxtLink to="/" class="hidden md:block text-[10px] tracking-widest text-slate-400 hover:text-orange-400 uppercase transition-colors">
-            Portal Publik
+        <div class="flex items-center gap-2">
+          <NuxtLink to="/" 
+            class="flex glass-card btn-hover items-center gap-2 text-[10px] px-3 py-2 rounded-lg md:rounded-full tracking-widest text-slate-400 hover:text-orange-400 uppercase transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <span class="hidden md:inline">Portal Publik</span>
           </NuxtLink>
           
-          <button @click="logout" 
-            class="flex items-center gap-2 px-4 py-2 border border-red-900/30 rounded-full bg-red-950/10 text-red-400 hover:bg-red-900/20 hover:border-red-500/50 transition-all duration-300">
-            <span class="text-[10px] font-bold tracking-widest uppercase">Keluar</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <button v-if="authCookie" @click="logout" 
+            class="flex items-center gap-2 px-3 md:px-4 py-2 border border-red-900/50 rounded-lg md:rounded-full bg-red-900/20 text-red-400 hover:bg-red-900/40 hover:border-red-500/50 transition-all duration-300 hover:-translate-y-1">
+            <span class="text-[10px] font-bold tracking-widest uppercase hidden md:inline">Logout</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
           </button>
@@ -60,16 +61,27 @@ const logout = () => {
 }
 
 /* Glass card dengan aksen Orange */
-.glass-card-admin {
+.glass-card {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(249, 115, 22, 0.1);
 }
 
-.btn-hover-admin:hover {
+.btn-hover:hover {
   background: rgba(249, 115, 22, 0.1);
   border: 1px solid rgba(249, 115, 22, 0.4);
   box-shadow: 0 0 30px rgba(249, 115, 22, 0.15);
   transform: translateY(-2px);
+}
+
+/* transisi pindah halaman */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.2s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(5px);
 }
 </style>
