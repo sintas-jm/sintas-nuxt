@@ -39,7 +39,7 @@ const logout = () => {
       </div>
     </nav>
 
-    <main class="w-full px-4 md:px-8 py-6">
+    <main class="w-full px-4 md:px-8 py-4 md:py-6">
       <slot />
     </main>
 

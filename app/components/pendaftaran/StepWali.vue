@@ -1,69 +1,81 @@
 <template>
-  <div class="w-full space-y-10 py-2">
+  <div class="w-full space-y-12 py-4">
+    
     <section>
-      <div class="border-b-2 border-teal-500/20 pb-1 mb-4">
-        <h3 class="text-md font-bold text-gray-800 flex items-center gap-2">
-          <span class="bg-teal-500 text-white w-6 h-6 rounded flex items-center justify-center text-xs">06</span>
-          Data Wali Santri
-        </h3>
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400 font-bold shadow-[0_0_15px_rgba(20,184,166,0.1)]">
+          06
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Data Wali Santri</h3>
+          <p class="text-[10px] text-slate-500 uppercase tracking-widest">Diisi jika santri tidak tinggal bersama orang tua</p>
+        </div>
       </div>
       
-      <div class="space-y-1">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center border-b border-gray-50 pb-2">
-          <label class="md:col-span-3 text-[12px] font-bold text-gray-600 uppercase">Identitas Wali *</label>
-          <div class="md:col-span-9 flex flex-col md:flex-row gap-2">
-            <input type="text" v-model="localData.nama_wali" @input="localData.nama_wali = localData.nama_wali.toUpperCase()" class="w-full md:w-2/3 px-3 py-2 border border-gray-300 rounded text-sm outline-none focus:border-teal-500 font-semibold uppercase" placeholder="Nama Lengkap Wali">
-            <input type="text" v-model="localData.hubungan_dengan_santri" class="w-full md:w-1/3 px-3 py-2 border border-gray-300 rounded text-sm outline-none focus:border-teal-500" placeholder="Hubungan (Paman/Bibi/dll)">
+      <div class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <label class="md:col-span-3 label-form tracking-widest">Identitas Wali *</label>
+          <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input type="text" v-model="localData.nama_wali" @input="localData.nama_wali = localData.nama_wali.toUpperCase()" 
+              class="form-input md:col-span-2 uppercase font-semibold" placeholder="NAMA LENGKAP WALI">
+            <input type="text" v-model="localData.hubungan_dengan_santri" class="form-input" placeholder="Hubungan (Paman/Kakak)">
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center border-b border-gray-50 pb-2">
-          <label class="md:col-span-3 text-[12px] font-bold text-gray-600 uppercase">Kelahiran Wali</label>
-          <div class="md:col-span-9 flex flex-col md:flex-row gap-2">
-            <input type="text" v-model="localData.tempat_lahir_wali" class="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded text-sm outline-none focus:border-teal-500" placeholder="Tempat Lahir">
-            <input type="date" v-model="localData.tgl_lahir_wali" :min="minDateWali" :max="maxDateWali" class="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded text-sm outline-none focus:border-teal-500">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <label class="md:col-span-3 label-form tracking-widest">Kelahiran</label>
+          <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" v-model="localData.tempat_lahir_wali" class="form-input" placeholder="Tempat Lahir">
+            <input type="date" v-model="localData.tgl_lahir_wali" :min="minDateWali" :max="maxDateWali" class="form-input">
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center border-b border-gray-50 pb-2">
-          <label class="md:col-span-3 text-[12px] font-bold text-gray-600 uppercase">Profil Wali</label>
-          <div class="md:col-span-9 flex flex-col md:flex-row gap-2">
-            <input type="text" v-model="localData.pekerjaan_wali" class="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded text-sm outline-none" placeholder="Pekerjaan Wali">
-            <input type="text" v-model="localData.pendidikan_wali" class="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded text-sm outline-none" placeholder="Pendidikan Terakhir">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <label class="md:col-span-3 label-form tracking-widest">Pekerjaan & Kontak</label>
+          <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" v-model="localData.pekerjaan_wali" class="form-input" placeholder="Pekerjaan Wali">
+            <input type="text" v-model="localData.hp_wali" @input="filterNumber('hp_wali', 15)" 
+              class="form-input border-teal-500/30 bg-teal-500/5 text-teal-100 font-bold" placeholder="NO. WHATSAPP WALI">
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center border-b border-gray-50 pb-2">
-          <label class="md:col-span-3 text-[12px] font-bold text-gray-600 uppercase">Kontak Wali *</label>
-          <div class="md:col-span-9 flex flex-col md:flex-row gap-2">
-            <input type="text" v-model="localData.hp_wali" @input="filterNumber('hp_wali', 15)" class="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded text-sm outline-none focus:border-teal-500 font-bold" placeholder="No. HP / WA Wali">
-            <input type="email" v-model="localData.email_wali" class="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded text-sm outline-none focus:border-teal-500" placeholder="Email Wali (Opsional)">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-start border-b border-gray-50 pb-2">
-          <label class="md:col-span-3 text-[12px] font-bold text-gray-600 uppercase mt-2">Alamat Lengkap</label>
-          <div class="md:col-span-9 space-y-2">
-            <textarea v-model="localData.alamat_wali" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded text-sm outline-none focus:border-teal-500" placeholder="Nama Jalan, Dusun, RT/RW"></textarea>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-              <input type="text" v-model="localData.desa_wali" placeholder="Desa" class="px-3 py-2 border border-gray-300 rounded text-sm outline-none">
-              <input type="text" v-model="localData.kecamatan_wali" placeholder="Kecamatan" class="px-3 py-2 border border-gray-300 rounded text-sm outline-none">
-              <input type="text" v-model="localData.kabupaten_wali" placeholder="Kabupaten" class="px-3 py-2 border border-gray-300 rounded text-sm outline-none">
-              <input type="text" v-model="localData.provinsi_wali" placeholder="Provinsi" class="px-3 py-2 border border-gray-300 rounded text-sm outline-none">
-              <input type="text" v-model="localData.kode_pos_wali" @input="filterNumber('kode_pos_wali', 5)" placeholder="Kode Pos" class="px-3 py-2 border border-gray-300 rounded text-sm outline-none">
-              <input type="text" v-model="localData.telp_rumah_wali" placeholder="Telp Rumah Wali" class="px-3 py-2 border border-gray-300 rounded text-sm outline-none">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+          <label class="md:col-span-3 label-form tracking-widest mt-3">Alamat Lengkap</label>
+          <div class="md:col-span-9 space-y-4">
+            <textarea v-model="localData.alamat_wali" rows="2" class="form-input resize-none" placeholder="Alamat Lengkap Wali"></textarea>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <input type="text" v-model="localData.desa_wali" placeholder="Desa" class="form-input">
+              <input type="text" v-model="localData.kecamatan_wali" placeholder="Kecamatan" class="form-input">
+              <input type="text" v-model="localData.kabupaten_wali" placeholder="Kab/Kota" class="form-input">
+              <input type="text" v-model="localData.provinsi_wali" placeholder="Provinsi" class="form-input">
+              <input type="text" v-model="localData.kode_pos_wali" @input="filterNumber('kode_pos_wali', 5)" placeholder="Kode Pos" class="form-input">
+              <input type="text" v-model="localData.telp_rumah_wali" placeholder="Telp Rumah" class="form-input">
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg">
-      <div class="flex gap-3">
-        <span class="text-xl">ℹ️</span>
-        <p class="text-xs text-amber-800 leading-relaxed">
-          <strong>Penting:</strong> Data Wali hanya wajib diisi jika calon santri tidak tinggal bersama orang tua kandung atau biaya pendidikan ditanggung oleh pihak wali. Jika data sudah lengkap, silakan klik tombol <strong>Selesaikan Pendaftaran</strong> di bawah.
-        </p>
+    <div class="relative overflow-hidden bg-amber-500/5 border border-amber-500/20 p-6 rounded-2xl group">
+      <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+      </div>
+      <div class="flex gap-4 items-start relative z-10">
+        <div class="p-2 bg-amber-500/20 rounded-lg text-amber-400">
+           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div class="space-y-1">
+          <h4 class="text-[11px] font-black text-amber-500 uppercase tracking-widest">Informasi Penting</h4>
+          <p class="text-xs text-slate-400 leading-relaxed max-w-2xl">
+            Data Wali hanya wajib diisi jika calon santri tidak tinggal bersama orang tua kandung atau biaya pendidikan ditanggung oleh pihak wali. Jika data sudah sesuai, silakan lanjutkan ke tahap konfirmasi.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -90,3 +102,25 @@ const minDateWali = computed(() => {
 
 watch(localData, (newVal) => emit('update:modelValue', newVal), { deep: true })
 </script>
+
+<style scoped>
+.form-input {
+  @apply w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-500 
+         outline-none transition-all duration-300 placeholder:text-slate-500
+         focus:bg-white/[0.07] focus:border-teal-500/50 focus:ring-4 focus:ring-teal-500/10;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.5;
+}
+
+.label-form {
+  @apply text-[12px] font-semibold text-slate-400 uppercase tracking-widest;
+}
+
+/* Style tambahan agar label lebih manis jika di-hover */
+.label-form:hover {
+  @apply text-slate-300 transition-colors duration-300;
+}
+</style>

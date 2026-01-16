@@ -13,15 +13,15 @@ const staffName = ref('Kakak Admin') // Nanti bisa dinamis
       <h1 class="text-lg font-light tracking-tight text-slate-300">Semangat!, <span class="font-semibold text-orange-200">{{ staffName }}</span></h1>
     </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <NuxtLink to="/pendaftaran/rekap" 
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <NuxtLink to="/publik/psb" 
         class="group p-4 glass-card btn-hover rounded-2xl transition-all duration-500 relative overflow-hidden block">
         <div class="relative z-10 flex items-start gap-5"> 
           <div class="shrink-0 w-12 h-12 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-xl flex items-center justify-center text-2xl shadow-xl group-hover:scale-110 transition-transform">
             📂
           </div>
           <div>
-            <h3 class="text-lg font-semibold mb-2 text-slate-300">Data Pendaftaran</h3>
+            <h3 class="text-lg font-semibold mb-1 text-slate-200">Data Pendaftaran</h3>
             <p class="text-slate-400 text-sm leading-relaxed">Kelola dan verifikasi berkas calon santri baru secara real-time.</p>
           </div>
         </div>
@@ -35,7 +35,7 @@ const staffName = ref('Kakak Admin') // Nanti bisa dinamis
             🕌
           </div>
           <div>
-            <h3 class="text-lg font-semibold mb-1 text-white">Jadwal Imam</h3>
+            <h3 class="text-lg font-semibold mb-1 text-slate-200">Jadwal Imam</h3>
             <p class="text-slate-400 text-xs leading-relaxed tracking-wide">Piket imam rawatib harian.</p>
           </div>
         </div>
@@ -47,7 +47,7 @@ const staffName = ref('Kakak Admin') // Nanti bisa dinamis
             🔒
           </div>
           <div>
-            <h3 class="text-lg font-semibold mb-2 text-slate-300">Presensi Santri</h3>
+            <h3 class="text-lg font-semibold mb-1 text-slate-300">Presensi Santri</h3>
             <p class="text-slate-500 text-sm leading-relaxed">Modul presensi digital sedang dalam tahap pengembangan sistem.</p>
           </div>
         </div>

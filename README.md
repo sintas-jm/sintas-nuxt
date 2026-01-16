@@ -4,6 +4,9 @@ Sistem Integrasi Data Santri Matlabus Salik
 ------------------------------------------------------------------
 
 log update :
+v1.4.0
+  - add form pendaftaran via internal link
+  - perbaikan ui piket imam
 
 v1.3.0
   - add jadwal piket di internal // staff only
@@ -17,4 +20,4 @@ v1.1.0
   - full wide layout staff
 
 v1.0.0
-  - home treelink
+  - home treelink mengarah ke webapp GAS

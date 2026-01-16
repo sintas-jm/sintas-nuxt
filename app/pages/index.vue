@@ -67,10 +67,27 @@ const formattedDate = computed(() => {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </div>
-        </NuxtLink>
+        </NuxtLink> 
       </div>
 
-      <div class="mt-8 w-full">
+      <div class="space-y-3 pt-6">
+        <NuxtLink to="/publik/psb"
+          class="group flex items-center p-3 glass-card btn-hover rounded-xl transition-all duration-300">
+          <div class="flex-shrink-0 w-10 h-10 bg-orange-950/50 text-orange-400 border border-orange-900/50 rounded-xl flex items-center justify-center font-bold shadow-inner"></div>
+          <div class="ml-5">
+            <p class="text-base font-normal group-hover:text-orange-300 transition-colors">Pendaftaran Santri Baru</p>
+            <p class="text-[10px] text-slate-500 uppercase tracking-tighter">Buka Aplikasi</p>
+          </div>
+
+          <div class="ml-auto opacity-30 group-hover:opacity-100 group-hover:text-orange-400 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </div>
+        </NuxtLink> 
+      </div>
+
+      <div class="mt-6 w-full">
         <NuxtLink to="/internal" 
           class="flex items-center justify-center gap-2 px-3 py-6 glass-card btn-hover text-[12px] text-slate-300 hover:text-orange-400 transition-colors tracking-[0.2em] uppercase border border-dashed border-slate-800 rounded-xl hover:border-orange-900/50">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">

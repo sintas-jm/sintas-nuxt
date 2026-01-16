@@ -58,7 +58,7 @@ const handleLogin = async () => {
 
         <button @click="handleLogin" :disabled="isLoading"
           class="w-full bg-gradient-to-r from-orange-600/60 to-orange-400/60 hover:from-orange-800/70 hover:to-orange-500/70   text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-orange-950/40 hover:scale-95 hover:text-slate-200/90 disabled:opacity-50">
-          {{ isLoading ? 'MENGECEK...' : 'MASUK' }}
+          {{ isLoading ? 'VERIFIKASI...' : 'MASUK' }}
         </button>
       </div>
     </div>

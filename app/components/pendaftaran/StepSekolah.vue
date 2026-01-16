@@ -1,52 +1,69 @@
 <template>
-  <div class="w-full space-y-10 py-2">
+  <div class="w-full space-y-12 py-4">
     <section>
-      <div class="border-b-2 border-indigo-500/20 pb-1 mb-4">
-        <h3 class="text-md font-bold text-gray-800 flex items-center gap-2">
-          <span class="bg-indigo-500 text-white w-6 h-6 rounded flex items-center justify-center text-xs">02</span>
-          Data Sekolah Asal
-        </h3>
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold shadow-[0_0_15px_rgba(99,102,241,0.1)]">
+          02
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Data Sekolah Asal</h3>
+          <p class="text-[10px] text-slate-500 uppercase tracking-widest">Riwayat pendidikan sebelumnya</p>
+        </div>
       </div>
       
-      <div class="space-y-1">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center border-b border-gray-50 pb-2">
-          <label class="md:col-span-3 text-[12px] font-bold text-gray-600 uppercase">Nama Sekolah *</label>
+      <div class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 items-center">
+          <label class="md:col-span-3 label-form tracking-widest">Nama Sekolah *</label>
           <div class="md:col-span-9">
-            <input type="text" v-model="localData.nama_sekolah_asal" @input="localData.nama_sekolah_asal = localData.nama_sekolah_asal.toUpperCase()" class="w-full px-3 py-2 border border-gray-300 rounded text-sm outline-none focus:border-indigo-500 font-semibold uppercase" placeholder="Masukkan Nama Sekolah Asal">
+            <input type="text" v-model="localData.nama_sekolah_asal" 
+              @input="localData.nama_sekolah_asal = localData.nama_sekolah_asal.toUpperCase()" 
+              placeholder="CONTOH: SDN 1 KEDIRI / SMPN 2 JAKARTA"
+              class="form-input uppercase font-semibold">
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center border-b border-gray-50 pb-2">
-          <label class="md:col-span-3 text-[12px] font-bold text-gray-600 uppercase">NISN & Tahun Lulus</label>
-          <div class="md:col-span-9 flex flex-col md:flex-row gap-2">
-            <input type="text" v-model="localData.nisn" @input="filterNumber('nisn', 10)" class="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded text-sm outline-none font-mono" placeholder="NISN (10 Digit)">
-            <select v-model="localData.tahun_lulus" class="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded text-sm outline-none">
-              <option v-for="y in graduateYears" :key="y" :value="y">Lulus Tahun {{ y }}</option>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 items-center">
+          <label class="md:col-span-3 label-form tracking-widest">NISN & Lulusan</label>
+          <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="relative">
+              <input type="text" v-model="localData.nisn" @input="filterNumber('nisn', 10)" 
+                class="form-input font-mono tracking-wider" placeholder="NISN (10 Digit)">
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] text-slate-600 font-bold tracking-tighter">ID</span>
+            </div>
+            <select v-model="localData.tahun_lulus" class="form-input">
+              <option v-for="y in graduateYears" :key="y" :value="y">Tahun Lulus {{ y }}</option>
             </select>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center border-b border-gray-50 pb-2">
-          <label class="md:col-span-3 text-[12px] font-bold text-gray-600 uppercase">Dokumen Kelulusan</label>
-          <div class="md:col-span-9 flex flex-col md:flex-row gap-2">
-            <input type="text" v-model="localData.no_ijazah" class="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded text-sm outline-none" placeholder="Nomor Ijazah">
-            <input type="text" v-model="localData.no_skhun" class="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded text-sm outline-none" placeholder="Nomor SKHUN">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 items-center">
+          <label class="md:col-span-3 label-form tracking-widest">Dokumen</label>
+          <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" v-model="localData.no_ijazah" class="form-input" placeholder="No. Ijazah (Opsional)">
+            <input type="text" v-model="localData.no_skhun" class="form-input" placeholder="No. SKHUN (Opsional)">
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-start border-b border-gray-50 pb-2">
-          <label class="md:col-span-3 text-[12px] font-bold text-gray-600 uppercase mt-2">Alamat Sekolah</label>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 items-start">
+          <label class="md:col-span-3 label-form tracking-widest mt-3">Alamat Sekolah</label>
           <div class="md:col-span-9">
-            <textarea v-model="localData.alamat_sekolah_asal" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded text-sm outline-none" placeholder="Alamat Lengkap Sekolah"></textarea>
+            <textarea v-model="localData.alamat_sekolah_asal" rows="2" 
+              class="form-input resize-none" placeholder="Alamat lengkap lokasi sekolah asal"></textarea>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center border-b border-gray-50 pb-2">
-          <label class="md:col-span-3 text-[12px] font-bold text-gray-600 uppercase">Wilayah Sekolah</label>
-          <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-2">
-            <input type="text" v-model="localData.kota_sekolah_asal" class="px-3 py-2 border border-gray-300 rounded text-sm outline-none" placeholder="Kota/Kab">
-            <input type="text" v-model="localData.provinsi_sekolah_asal" class="px-3 py-2 border border-gray-300 rounded text-sm outline-none" placeholder="Provinsi">
-            <input type="text" v-model="localData.negara_sekolah_asal" class="px-3 py-2 border border-gray-300 rounded text-sm outline-none" placeholder="Negara">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 items-center">
+          <label class="md:col-span-3 label-form tracking-widest">Wilayah</label>
+          <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="space-y-1">
+              <input type="text" v-model="localData.kota_sekolah_asal" class="form-input text-xs" placeholder="Kota/Kab">
+            </div>
+            <div class="space-y-1">
+              <input type="text" v-model="localData.provinsi_sekolah_asal" class="form-input text-xs" placeholder="Provinsi">
+            </div>
+            <div class="space-y-1">
+              <input type="text" v-model="localData.negara_sekolah_asal" class="form-input text-xs" placeholder="Negara">
+            </div>
           </div>
         </div>
       </div>
@@ -59,7 +76,6 @@ const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 const localData = ref({ ...props.modelValue })
 
-// Logika Tahun Lulus: Hanya 5 tahun kebelakang dari tahun sekarang (2026)
 const graduateYears = computed(() => {
   const currentYear = new Date().getFullYear()
   return Array.from({ length: 6 }, (_, i) => currentYear - i)
@@ -71,3 +87,29 @@ const filterNumber = (k, m) => {
 
 watch(localData, (v) => emit('update:modelValue', v), { deep: true })
 </script>
+
+<style scoped>
+/* Gunakan utility class yang sama dengan StepSantri */
+.form-input {
+  @apply w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-500 
+         outline-none transition-all duration-300 placeholder:text-slate-500
+         focus:bg-white/[0.07] focus:border-indigo-500/50 focus:ring-4 focus:ring-indigo-500/10;
+}
+
+.label-form {
+  @apply text-[12px] font-semibold text-slate-400 uppercase tracking-widest;
+}
+
+/* Style tambahan agar label lebih manis jika di-hover */
+.label-form:hover {
+  @apply text-slate-300 transition-colors duration-300;
+}
+
+textarea.form-input {
+  @apply py-4;
+}
+
+select option {
+  @apply bg-[#0f172a] text-white/80;
+}
+</style>
