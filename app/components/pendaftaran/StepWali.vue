@@ -4,7 +4,7 @@
     <section>
       <div class="flex items-center gap-4 mb-8">
         <div class="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400 font-bold shadow-[0_0_15px_rgba(20,184,166,0.1)]">
-          06
+          08
         </div>
         <div>
           <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Data Wali Santri</h3>
@@ -14,7 +14,7 @@
       
       <div class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">Identitas Wali *</label>
+          <label class="md:col-span-3 label-form">Identitas Wali *</label>
           <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-4">
             <input type="text" v-model="localData.nama_wali" @input="localData.nama_wali = localData.nama_wali.toUpperCase()" 
               class="form-input md:col-span-2 uppercase font-semibold" placeholder="NAMA LENGKAP WALI">
@@ -23,7 +23,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">Kelahiran</label>
+          <label class="md:col-span-3 label-form">Kelahiran</label>
           <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-4">
             <input type="text" v-model="localData.tempat_lahir_wali" class="form-input" placeholder="Tempat Lahir">
             <input type="date" v-model="localData.tgl_lahir_wali" :min="minDateWali" :max="maxDateWali" class="form-input">
@@ -31,7 +31,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">Pekerjaan & Kontak</label>
+          <label class="md:col-span-3 label-form">Pekerjaan & Kontak</label>
           <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-4">
             <input type="text" v-model="localData.pekerjaan_wali" class="form-input" placeholder="Pekerjaan Wali">
             <input type="text" v-model="localData.hp_wali" @input="filterNumber('hp_wali', 15)" 
@@ -40,7 +40,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-          <label class="md:col-span-3 label-form tracking-widest mt-3">Alamat Lengkap</label>
+          <label class="md:col-span-3 label-form mt-3">Alamat Lengkap</label>
           <div class="md:col-span-9 space-y-4">
             <textarea v-model="localData.alamat_wali" rows="2" class="form-input resize-none" placeholder="Alamat Lengkap Wali"></textarea>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -100,12 +100,18 @@ const minDateWali = computed(() => {
   return `${limitYear}-01-01`
 })
 
+// Di StepWali.vue (jika tidak mau ada validasi wajib)
+const validate = () => {
+  return { valid: true, errors: [] }
+}
+defineExpose({ validate })
+
 watch(localData, (newVal) => emit('update:modelValue', newVal), { deep: true })
 </script>
 
 <style scoped>
 .form-input {
-  @apply w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-500 
+  @apply w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 
          outline-none transition-all duration-300 placeholder:text-slate-500
          focus:bg-white/[0.07] focus:border-teal-500/50 focus:ring-4 focus:ring-teal-500/10;
 }

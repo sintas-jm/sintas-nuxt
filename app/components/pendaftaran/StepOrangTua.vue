@@ -1,10 +1,11 @@
+// app/components/pendaftaran/StepOrangTua.vue
 <template>
   <div class="w-full space-y-12 py-4">
     
     <section>
       <div class="flex items-center gap-4 mb-8">
         <div class="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-orange-400 font-bold">
-          03
+          05
         </div>
         <div>
           <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Data Ayah Kandung</h3>
@@ -14,7 +15,7 @@
       
       <div class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">No. Kartu Keluarga</label>
+          <label class="md:col-span-3 label-form">No. Kartu Keluarga</label>
           <div class="md:col-span-6">
             <input type="text" v-model="localData.no_kk" @input="filterNumber('no_kk', 16)" 
               class="form-input font-mono tracking-[0.2em]" placeholder="16 DIGIT NOMOR KK">
@@ -22,17 +23,18 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">Identitas Ayah *</label>
+          <label class="md:col-span-3 label-form">Identitas Ayah *</label>
           <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input type="text" v-model="localData.nama_ayah" @input="localData.nama_ayah = localData.nama_ayah.toUpperCase()" 
-              class="form-input md:col-span-2 uppercase" placeholder="NAMA LENGKAP AYAH">
+            <input type="text" v-model="localData.nama_ayah" @input="handleUpper('nama_ayah')" 
+              class="form-input md:col-span-2 uppercase" placeholder="NAMA LENGKAP AYAH"
+              :class="{ '!border-red-500/40 bg-red-500/5': !localData.nama_ayah }">
             <input type="text" v-model="localData.nik_ayah" @input="filterNumber('nik_ayah', 16)" 
               class="form-input font-mono" placeholder="NIK AYAH (16 DIGIT)">
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">Profil Ayah</label>
+          <label class="md:col-span-3 label-form">Profil Ayah</label>
           <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-4">
             <input type="text" v-model="localData.tempat_lahir_ayah" class="form-input" placeholder="Tempat Lahir">
             <input type="date" v-model="localData.tgl_lahir_ayah" :min="minDateOrtua" :max="maxDateOrtua" class="form-input">
@@ -44,7 +46,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">Pekerjaan & Pend.</label>
+          <label class="md:col-span-3 label-form">Pekerjaan & Pend.</label>
           <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-4">
             <input type="text" v-model="localData.pekerjaan_ayah" class="form-input" placeholder="Pekerjaan Ayah">
             <input type="text" v-model="localData.pendidikan_ayah" class="form-input" placeholder="Pendidikan Terakhir">
@@ -56,7 +58,7 @@
     <section class="pt-10 border-t border-white/5">
       <div class="flex items-center gap-4 mb-8">
         <div class="w-10 h-10 rounded-xl bg-pink-500/20 border border-pink-500/30 flex items-center justify-center text-pink-400 font-bold">
-          04
+          06
         </div>
         <div>
           <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Data Ibu Kandung</h3>
@@ -66,17 +68,18 @@
 
       <div class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">Identitas Ibu *</label>
+          <label class="md:col-span-3 label-form">Identitas Ibu *</label>
           <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input type="text" v-model="localData.nama_ibu" @input="localData.nama_ibu = localData.nama_ibu.toUpperCase()" 
-              class="form-input md:col-span-2 uppercase" placeholder="NAMA LENGKAP IBU">
+            <input type="text" v-model="localData.nama_ibu" @input="handleUpper('nama_ibu')" 
+              class="form-input md:col-span-2 uppercase" placeholder="NAMA LENGKAP IBU"
+              :class="{ '!border-red-500/40 bg-red-500/5': !localData.nama_ibu }">
             <input type="text" v-model="localData.nik_ibu" @input="filterNumber('nik_ibu', 16)" 
               class="form-input font-mono" placeholder="NIK IBU (16 DIGIT)">
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">Profil Ibu</label>
+          <label class="md:col-span-3 label-form">Profil Ibu</label>
           <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-4">
             <input type="text" v-model="localData.tempat_lahir_ibu" class="form-input" placeholder="Tempat Lahir">
             <input type="date" v-model="localData.tgl_lahir_ibu" :min="minDateOrtua" :max="maxDateOrtua" class="form-input">
@@ -88,7 +91,15 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">Kondisi & Biaya</label>
+          <label class="md:col-span-3 label-form">Pekerjaan & Pend.</label>
+          <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" v-model="localData.pekerjaan_ibu" class="form-input" placeholder="Pekerjaan Ibu">
+            <input type="text" v-model="localData.pendidikan_ibu" class="form-input" placeholder="Pendidikan Terakhir">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <label class="md:col-span-3 label-form">Kondisi & Biaya</label>
           <div class="md:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-4">
             <select v-model="localData.orangtua_hidup" class="form-input bg-orange-500/5 border-orange-500/20 text-orange-200">
               <option value="Keduanya masih hidup">Ayah & Ibu Masih Hidup</option>
@@ -108,8 +119,8 @@
     <section class="pt-10 border-t border-white/5">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div class="flex items-center gap-4">
-          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
-            05
+          <div class="w-10 h-10 rounded-xl bg-yellow-500/20 border border-yellow-500/30 flex items-center justify-center text-yellow-400 font-bold">
+            07
           </div>
           <div>
             <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Domisili & Kontak</h3>
@@ -124,14 +135,14 @@
 
       <div class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          <label class="md:col-span-3 label-form tracking-widest">Alamat Lengkap</label>
+          <label class="md:col-span-3 label-form">Alamat Lengkap</label>
           <div class="md:col-span-9">
             <input type="text" v-model="localData.alamat_orangtua" class="form-input" placeholder="Nama Jalan / RT / RW">
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-          <label class="md:col-span-3 label-form tracking-widest mt-3">Wilayah</label>
+          <label class="md:col-span-3 label-form mt-3">Wilayah</label>
           <div class="md:col-span-9 grid grid-cols-2 md:grid-cols-3 gap-4">
             <input type="text" v-model="localData.desa_ortu" placeholder="Desa" class="form-input">
             <input type="text" v-model="localData.kecamatan_ortu" placeholder="Kecamatan" class="form-input">
@@ -143,7 +154,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 border-t border-white/5 pt-6 mt-6">
-          <label class="md:col-span-3 label-form tracking-widest mt-3">Kontak WA *</label>
+          <label class="md:col-span-3 label-form mt-3">Kontak WA *</label>
           <div class="md:col-span-9 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input type="text" v-model="localData.hp_ayah" @input="filterNumber('hp_ayah', 15)" class="form-input" placeholder="HP Ayah (WhatsApp)">
@@ -152,10 +163,13 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="relative">
                 <input type="text" v-model="localData.hp_informasi" @input="filterNumber('hp_informasi', 15)" 
-                  class="form-input border-emerald-500/50 bg-emerald-500/5 text-emerald-100 font-bold" placeholder="NOMOR WA UTAMA">
+                  class="form-input border-emerald-500/50 bg-emerald-500/5 text-emerald-100 font-bold" 
+                  placeholder="NOMOR WA UTAMA"
+                  :class="{'!border-red-500/40 bg-red-500/5': !localData.hp_informasi || (localData.hp_informasi.length < 10)}">
                 <span class="absolute -top-2 left-3 bg-[#0f172a] px-2 text-[8px] text-emerald-400 font-black uppercase tracking-widest">Penting</span>
               </div>
-              <input type="email" v-model="localData.email_ortu" class="form-input" placeholder="Alamat Email Aktif">
+              <input type="email" v-model="localData.email_ortu" class="form-input" placeholder="Alamat Email Aktif"
+                :class="{ '!border-red-500/40 bg-red-500/5': !localData.email_ortu }">
             </div>
             <select v-model="localData.penghasilan_bulanan" class="form-input">
               <option value="">Pilih Penghasilan Bulanan</option>
@@ -176,15 +190,16 @@ const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 const localData = ref({ ...props.modelValue })
 
-const maxDateOrtua = computed(() => {
-  const limitYear = new Date().getFullYear() - 27 
-  return `${limitYear}-12-31`
-})
+const handleUpper = (key) => {
+  if (localData.value[key]) localData.value[key] = localData.value[key].toUpperCase()
+}
 
-const minDateOrtua = computed(() => {
-  const limitYear = new Date().getFullYear() - 80
-  return `${limitYear}-01-01`
-})
+const filterNumber = (key, maxLength) => {
+  localData.value[key] = String(localData.value[key] || '').replace(/\D/g, '').slice(0, maxLength)
+}
+
+const maxDateOrtua = computed(() => `${new Date().getFullYear() - 25}-12-31`)
+const minDateOrtua = computed(() => `${new Date().getFullYear() - 80}-01-01`)
 
 const copyAlamatSantri = () => {
   localData.value.alamat_orangtua = localData.value.alamat
@@ -195,16 +210,37 @@ const copyAlamatSantri = () => {
   localData.value.kode_pos_ortu = localData.value.kode_pos
 }
 
-const filterNumber = (key, maxLength) => {
-  localData.value[key] = String(localData.value[key] || '').replace(/\D/g, '').slice(0, maxLength)
+const validate = () => {
+  const mandatory = ['nama_ayah', 'nama_ibu', 'hp_informasi', 'email_ortu']
+  
+  // 1. Cek apakah ada yang kosong
+  const isAnyEmpty = mandatory.some(key => !localData.value[key]?.toString().trim())
+  
+  // 2. Cek panjang nomor HP Utama (Minimal 10 digit)
+  const hpValue = localData.value.hp_informasi ? String(localData.value.hp_informasi) : ''
+  const isHpTooShort = hpValue.length > 0 && hpValue.length < 10
+
+  if (isHpTooShort) {
+    return {
+      valid: false,
+      errors: ["Nomor WA Utama tidak valid (Minimal 10 digit)"]
+    }
+  }
+
+  return {
+    valid: !isAnyEmpty,
+    errors: isAnyEmpty ? ["Nama Orang Tua & Kontak WA wajib diisi lengkap"] : []
+  }
 }
+
+defineExpose({ validate })
 
 watch(localData, (newVal) => emit('update:modelValue', newVal), { deep: true })
 </script>
 
 <style scoped>
 .form-input {
-  @apply w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-500 
+  @apply w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 
          outline-none transition-all duration-300 placeholder:text-slate-500
          focus:bg-white/[0.07] focus:border-orange-500/50 focus:ring-4 focus:ring-orange-500/10;
 }

@@ -8,13 +8,14 @@
   })
 
   const currentStep = ref(1)
+  const stepComponentRef = ref(null) // TAMBAHKAN INI: Untuk menangkap fungsi dari anak
   const totalSteps = 5 // Tambah jadi 5
   const stepTitles = [
     'Biodata Santri', 
     'Sekolah Asal', 
     'Data Orang Tua', 
     'Data Wali', 
-    'Konfirmasi Akhir' // Judul baru
+    'Konfirmasi Akhir'
   ]
 
   const steps = [
@@ -22,7 +23,7 @@
     resolveComponent('PendaftaranStepSekolah'),
     resolveComponent('PendaftaranStepOrangTua'),
     resolveComponent('PendaftaranStepWali'),
-    resolveComponent('PendaftaranStepKonfirmasi') // Tambahkan ini
+    resolveComponent('PendaftaranStepKonfirmasi')
   ]
 
   const masterForm = ref({
@@ -134,22 +135,28 @@
 
   // FUNGSI NAVIGASI UTAMA
   const handleNavigation = () => {
-    // 1. Logika Loncat (Skip Wali)
-    if (currentStep.value === 3 && masterForm.value.penanggung_santri === 'Orang Tua') {
-      currentStep.value = 5 // Langsung ke Konfirmasi
-      if (process.client) window.scrollTo({ top: 0, behavior: 'smooth' })
-      return
+    // 1. Validasi Anak (Step 1, 2, 3, dst)
+    if (stepComponentRef.value?.validate) {
+      const { valid, errors } = stepComponentRef.value.validate()
+      
+      if (!valid) {
+        // Cukup ambil pesan pertama saja karena isinya sama
+        alert(errors[0] || "Mohon lengkapi data yang ditandai merah")
+        return 
+      }
     }
 
-    // 2. Logika Submit di Step Terakhir
-    if (currentStep.value === 5) {
-      if (!masterForm.value.is_setuju) {
-        alert("Centang persetujuan dulu bos!");
+    // 2. Logika Loncat (Skip Wali)
+    const isSkipWali = currentStep.value === 3 && masterForm.value.penanggung_santri === 'Orang Tua'
+    
+    // 3. Logika Kirim atau Lanjut
+    if (currentStep.value === totalSteps || isSkipWali) {
+      if (currentStep.value === 5 && !masterForm.value.is_setuju) {
+        alert("Mohon dicentang persetujuan")
         return
       }
       submitFinal()
     } else {
-      // 3. Jalan Normal
       currentStep.value++
       if (process.client) window.scrollTo({ top: 0, behavior: 'smooth' })
     }
@@ -177,7 +184,7 @@
     const hasil = await kirimPendaftaran(masterForm.value)
     
     if (hasil.success) {
-      alert("Alhamdulillah, data berhasil disimpan!")
+      alert("Data berhasil disimpan!")
       navigateTo('/publik/psb/rekap-pendaftar')
     } else {
       alert("Maaf, terjadi kendala: " + hasil.message)
@@ -225,6 +232,7 @@
             <component 
               :is="steps[currentStep - 1]" 
               v-model="masterForm" 
+              ref="stepComponentRef"
             />
           </KeepAlive>
 
@@ -243,8 +251,8 @@
               type="submit"
               :disabled="loading"
               :class="[
-                loading ? 'bg-slate-800 text-slate-500' : 'bg-orange-600 hover:bg-orange-500 text-white shadow-[0_0_20px_rgba(234,88,12,0.2)]',
-                'px-8 py-3 rounded-xl text-[11px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-3'
+                loading ? 'bg-slate-800 text-slate-500' : 'bg-orange-600/80 hover:bg-orange-500/80 hover:scale-95 text-white shadow-[0_0_20px_rgba(234,88,12,0.2)]',
+                'px-6 py-3 rounded-xl text-[12px] font-semibold uppercase tracking-[0.2em] transition-all flex items-center gap-3'
               ]"
             >
               <span v-if="loading" class="animate-spin text-lg">⏳</span>
@@ -253,7 +261,7 @@
                 Kirim Pendaftaran <span class="text-lg">✅</span>
               </template>
               <template v-else>
-                Langkah Berikutnya <span class="text-lg">→</span>
+                Lanjut <span class="text-lg">→</span>
               </template>
             </button>
           </div>

@@ -62,7 +62,7 @@ const logout = () => {
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
 .default-layout {
-  background: linear-gradient(174deg, #020617 20%, #0f172a 60%, #43300b 100%);
+  background: linear-gradient(174deg, #020617 20%, #0f172a 60%, #291c03 100%);
   background-attachment: fixed;
   color: #f8fafc;
   font-family: 'Montserrat', sans-serif;

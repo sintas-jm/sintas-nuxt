@@ -53,7 +53,7 @@ const logout = () => {
 <style>
 .internal-layout {
   /* Kembali ke gairah Orange-Gold yang elegan */
-  background: linear-gradient(174deg, #020617 20%, #0f172a 60%, #43300b 100%);
+  background: linear-gradient(174deg, #020617 20%, #0f172a 60%, #291c03 100%);
   /* background: linear-gradient(190deg, #020617 20%, #0f172a 60%, #43300b 100%); */
   background-attachment: fixed;
   color: #f8fafc;

@@ -4,6 +4,10 @@ Sistem Integrasi Data Santri Matlabus Salik
 ------------------------------------------------------------------
 
 log update :
+
+v1.4.1
+  - menambah validasi pendaftaran
+
 v1.4.0
   - add form pendaftaran via internal link
   - perbaikan ui piket imam
