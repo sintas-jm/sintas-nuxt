@@ -5,6 +5,11 @@ Sistem Integrasi Data Santri Matlabus Salik
 
 log update :
 
+v1.4.2
+  - perbaikan validasi perndaftaran menggunakan zod
+  - menambah UI toast
+  - perbaikan konfirmasi pendaftaran
+  
 v1.4.1
   - menambah validasi pendaftaran
 

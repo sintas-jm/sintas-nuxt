@@ -81,6 +81,7 @@
 </template>
 
 <script setup>
+import { z } from 'zod'
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 const localData = ref({ ...props.modelValue })
@@ -89,6 +90,23 @@ const localData = ref({ ...props.modelValue })
 const graduateYears = computed(() => {
   const currentYear = new Date().getFullYear()
   return Array.from({ length: 7 }, (_, i) => currentYear - i)
+})
+
+const currentYear = new Date().getFullYear()
+
+const sekolahSchema = z.object({
+  nama_sekolah_asal: z.string().min(3, "Nama sekolah asal wajib diisi"),
+  alamat_sekolah_asal: z.string().min(1, "Alamat sekolah wajib diisi"), 
+  kota_sekolah_asal: z.string().min(1, "Kota sekolah asal wajib diisi"),
+  provinsi_sekolah_asal: z.string().min(1, "Provinsi sekolah asal wajib diisi"),
+  tahun_lulus: z.coerce.number()
+    .min(currentYear - 10, "Tahun lulus terlalu lama (Maksimal 10 tahun terakhir)")
+    .max(currentYear, "Tahun lulus tidak boleh melebihi tahun saat ini"),
+    
+  // NISN Opsional: jika diisi harus 10 digit
+  nisn: z.string().optional().refine(val => !val || val.length === 10, {
+    message: "NISN harus 10 digit"
+  })
 })
 
 const handleUpper = (key) => {
@@ -103,35 +121,19 @@ const filterNumber = (k, m) => {
 
 // Fungsi Validasi Utama
 const validate = () => {
-  const currentYear = new Date().getFullYear()
-  
-  // NISN dihapus dari daftar wajib
-  const mandatory = [
-    'nama_sekolah_asal', 
-    'kota_sekolah_asal', 
-    'alamat_sekolah_asal',
-    'provinsi_sekolah_asal', 
-    'tahun_lulus'
-  ]
+  const result = sekolahSchema.safeParse(localData.value)
 
-  const isAnyEmpty = mandatory.some(key => !localData.value[key]?.toString().trim())
-  
-  // Proteksi: Jika user memilih tahun secara ilegal via inspect/db
-  const isYearInvalid = localData.value.tahun_lulus && parseInt(localData.value.tahun_lulus) > currentYear
-
-  if (isYearInvalid) {
+  if (!result.success) {
+    const firstMessage = result.error.issues[0]?.message || "Data sekolah belum lengkap"
     return {
       valid: false,
-      errors: [`Tahun lulus tidak masuk akal (Maksimal ${currentYear})`]
+      errors: [firstMessage]
     }
   }
 
-  return {
-    valid: !isAnyEmpty,
-    errors: isAnyEmpty ? ["Mohon lengkapi data"] : []
-  }
+  return { valid: true, errors: [] }
 }
-
+0
 // Ekspos ke Parent
 defineExpose({ validate })
 
@@ -161,7 +163,7 @@ select option {
 }
 
 .label-form {
-  @apply text-[12px] font-semibold text-slate-400 uppercase tracking-widest;
+  @apply text-[12px] font-semibold text-slate-300 uppercase tracking-widest;
 }
 
 /* Style tambahan agar label lebih manis jika di-hover */

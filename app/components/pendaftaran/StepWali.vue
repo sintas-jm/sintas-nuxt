@@ -72,8 +72,9 @@
         </div>
         <div class="space-y-1">
           <h4 class="text-[11px] font-black text-amber-500 uppercase tracking-widest">Informasi Penting</h4>
-          <p class="text-xs text-slate-400 leading-relaxed max-w-2xl">
-            Data Wali hanya wajib diisi jika calon santri tidak tinggal bersama orang tua kandung atau biaya pendidikan ditanggung oleh pihak wali. Jika data sudah sesuai, silakan lanjutkan ke tahap konfirmasi.
+          <p class="text-sm text-slate-400 leading-relaxed max-w-2xl">
+            Data Wali hanya wajib diisi jika calon santri ditanggung oleh selain orang tua. 
+            <span class="block mt-1">Jika data sudah sesuai, silakan lanjutkan ke tahap konfirmasi.</span>
           </p>
         </div>
       </div>
@@ -82,29 +83,58 @@
 </template>
 
 <script setup>
+import { z } from 'zod'
+
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 const localData = ref({ ...props.modelValue })
 
+// --- SCHEMA ZOD (Modern & Clean) ---
+const waliSchema = z.object({
+  nama_wali: z.string().optional(),
+  hp_wali: z.string().optional(),
+  hubungan_dengan_santri: z.string().optional(),
+  penanggung_santri: z.string().optional(), // Tambahkan ini agar bisa dibaca Zod
+  kode_pos_wali: z.string().optional().refine(val => !val || val.length === 5, {
+    message: "Kode Pos Wali harus 5 digit"
+  }),
+}).refine((data) => {
+  // LOGIKA 1: Jika memang penanggungnya adalah WALI, maka WAJIB ISI
+  if (data.penanggung_santri === 'Wali') {
+    return (
+      !!data.nama_wali && data.nama_wali.trim().length >= 3 &&
+      !!data.hp_wali && data.hp_wali.length >= 10 &&
+      !!data.hubungan_dengan_santri
+    )
+  }
+  return true // Jika penanggungnya Orang Tua, kosong pun tidak apa-apa
+}, {
+  message: "Mohon lengkapi Nama, Hubungan, dan kontak Wali",
+  path: ["nama_wali"]
+})
+
+const validate = () => {
+  const result = waliSchema.safeParse(localData.value)
+  
+  if (!result.success) {
+    // Menggunakan issues[0] agar tidak deprecated
+    return {
+      valid: false,
+      errors: [result.error.issues[0].message]
+    }
+  }
+  return { valid: true, errors: [] }
+}
+
+defineExpose({ validate })
+
+// --- LOGIC PEMBANTU ---
 const filterNumber = (key, maxLength) => {
   localData.value[key] = String(localData.value[key] || '').replace(/\D/g, '').slice(0, maxLength)
 }
 
-const maxDateWali = computed(() => {
-  const limitYear = new Date().getFullYear() - 27 
-  return `${limitYear}-12-31`
-})
-
-const minDateWali = computed(() => {
-  const limitYear = new Date().getFullYear() - 80
-  return `${limitYear}-01-01`
-})
-
-// Di StepWali.vue (jika tidak mau ada validasi wajib)
-const validate = () => {
-  return { valid: true, errors: [] }
-}
-defineExpose({ validate })
+const maxDateWali = computed(() => `${new Date().getFullYear() - 27}-12-31`)
+const minDateWali = computed(() => `${new Date().getFullYear() - 80}-01-01`)
 
 watch(localData, (newVal) => emit('update:modelValue', newVal), { deep: true })
 </script>
@@ -122,7 +152,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .label-form {
-  @apply text-[12px] font-semibold text-slate-400 uppercase tracking-widest;
+  @apply text-[12px] font-semibold text-slate-300 uppercase tracking-widest;
 }
 
 /* Style tambahan agar label lebih manis jika di-hover */

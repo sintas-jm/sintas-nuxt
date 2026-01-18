@@ -1,53 +1,52 @@
-// app/composables/usePendaftaran.ts
-
 export const usePendaftaran = () => {
   const loading = ref(false)
-  const error = ref(null)
+  const error = ref<string | null>(null)
 
+  // 1. kirimPendaftaran: Gunakan $fetch karena dipanggil dari EVENT klik tombol
   const kirimPendaftaran = async (payload: any) => {
     loading.value = true
     error.value = null
 
     try {
-      // Kita menembak ke API internal Nuxt (Proxy)
-      const { data, error: fetchError } = await useFetch('/api/pendaftaran', {
+      // Gunakan $fetch untuk interaksi user
+      const data = await $fetch('/api/pendaftaran', {
         method: 'POST',
-        body: payload,
-        watch: false
+        body: payload
       })
-
-      if (fetchError.value) {
-        throw new Error(fetchError.value.statusMessage || 'Gagal mengirim data')
-      }
 
       return {
         success: true,
-        data: data.value
+        data: data
       }
 
     } catch (err: any) {
-      error.value = err.message
-      return { success: false, message: err.message }
+      // Menangkap error dari server (misal validasi backend gagal)
+      const msg = err.data?.message || err.message || 'Gagal mengirim data'
+      error.value = msg
+      return { success: false, message: msg }
     } finally {
       loading.value = false
     }
   }
 
-  // Gunakan useState agar data sinkron antar komponen
+  // 2. State Global untuk Info Periode
   const periodeInfo = useState('periode_psb', () => ({
     id_psb: '',
-    nama_psb: '', 
+    nama_psb: 'Memuat sistem pendaftaran...', 
     status_aktif: true
   }))
 
+  // 3. fetchPeriode: Gunakan useFetch agar mendukung SSR (Data muncul saat refresh)
   const fetchPeriode = async () => {
+    // Gunakan useFetch di sini jika ingin data diambil saat setup
+    // Tapi karena kamu panggil di onMounted, $fetch juga boleh. 
+    // Namun, kita perbaiki logika pencariannya agar lebih kuat:
     try {
-      // Panggil server/api/pendaftaran.get.ts
-      const data = await $fetch('/api/pendaftaran')
+      const data: any = await $fetch('/api/pendaftaran')
       
-      if (Array.isArray(data)) {
-        // Cari baris yang status_aktif-nya TRUE (atau baris pertama jika tidak ada)
-        const aktif = data.find(p => p.status_aktif === true || p.status_aktif === "TRUE") || data[0]
+      if (Array.isArray(data) && data.length > 0) {
+        // Logika cari yang aktif
+        const aktif = data.find(p => p.status_aktif === true || String(p.status_aktif).toUpperCase() === "TRUE") || data[0]
         
         if (aktif) {
           periodeInfo.value = {
@@ -59,7 +58,7 @@ export const usePendaftaran = () => {
       }
     } catch (err: any) {
       console.error("Gagal mengambil periode:", err)
-      periodeInfo.value.nama_psb = "Penerimaan Santri Baru" // fallback
+      periodeInfo.value.nama_psb = "Penerimaan Santri Baru"
     }
   }
 

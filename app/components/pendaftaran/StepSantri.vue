@@ -18,7 +18,7 @@
           <div class="md:col-span-9">
             <input type="text" 
               v-model="localData.nama_lengkap" @input="handleInput" 
-              placeholder="NAMA LENGKAP SESUAI IJAZAH"
+              placeholder="Nama lengkap sesuai ijazah"
               class="form-input uppercase"
               :class="{ '!border-red-500/40 bg-red-500/5': !localData.nama_lengkap }" />
           </div>
@@ -41,6 +41,7 @@
           <div class="md:col-span-9 grid grid-cols-2 gap-4">
             <select v-model="localData.jenis_kelamin" class="form-input" 
                     :class="{ '!border-red-500/40 bg-red-500/5': !localData.jenis_kelamin }">
+              <option value="" disabled>Pilih Gender</option>
               <option value="L">Laki-laki</option>
               <option value="P">Perempuan</option>
             </select>
@@ -64,11 +65,11 @@
           <label class="md:col-span-3 label-form">Status Anak *</label>
           <div class="md:col-span-9 flex flex-wrap items-center gap-4">
             <div class="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5">
-              <span class="text-[10px] text-slate-500 uppercase">Anak Ke-</span>
+              <span class="text-[10px] text-slate-400 uppercase">Anak Ke-</span>
               <input type="text" v-model="localData.anak_ke" @input="filterNumber('anak_ke', 2)" class="w-14 bg-transparent text-center text-orange-300 font-bold outline-none" :class="{'text-red-500/40': !localData.anak_ke }" />
-              <span class="text-[10px] text-slate-500 uppercase">dari</span>
+              <span class="text-[10px] text-slate-400 uppercase">dari</span>
               <input type="text" v-model="localData.jumlah_saudara" @input="filterNumber('jumlah_saudara', 2)" class="w-14 bg-transparent text-center text-orange-300 font-bold outline-none" :class="{ 'text-red-500/40': !localData.jumlah_saudara }" />
-              <span class="text-[10px] text-slate-500 uppercase">bersaudara</span>
+              <span class="text-[10px] text-slate-400 uppercase">bersaudara</span>
             </div>
             <select v-model="localData.status_keluarga" class="form-input flex-1 min-w-[150px]">
               <option value="Anak Kandung">Anak Kandung</option>
@@ -132,7 +133,7 @@
         <div class="space-y-2">
           <label class="label-form">Gol. Darah</label>
           <select v-model="localData.golongan_darah" class="form-input">
-            <option value="-">-</option>
+            <option value="-">--</option>
             <option value="A">A</option><option value="B">B</option><option value="AB">AB</option><option value="O">O</option>
           </select>
         </div>
@@ -171,41 +172,61 @@
 </template>
 
 <script setup>
+import { z } from 'zod'
+
 const props = defineProps(['modelValue'])
 const emit = defineEmits(['update:modelValue'])
 const localData = ref({ ...props.modelValue })
 
 const maxDateSantri = computed(() => `${new Date().getFullYear() - 11}-12-31`)
 
-// 1. Fungsi Pembantu untuk Highlight Merah (Reactive)
-const mandatoryAlamat = ['alamat', 'desa', 'kecamatan', 'kabupaten', 'provinsi', 'kode_pos']
+// --- VALIDATION SCHEMA (ZOD) ---
+const santriSchema = z.object({
+  nama_lengkap: z.string().min(3, "Nama lengkap minimal 3 karakter"),
+  jenjang_daftar: z.string().min(1, "Pilih jenjang pendaftaran"),
+  jenis_kelamin: z.string().min(1, "Pilih jenis kelamin"),
+  agama: z.string().min(1, "Agama wajib diisi"),
+  tempat_lahir: z.string().min(1, "Tempat lahir wajib diisi"),
+  tanggal_lahir: z.string().min(1, "Tanggal lahir wajib diisi").refine((val) => {
+    return new Date(val) <= new Date(maxDateSantri.value);
+  }, "Usia minimal santri adalah 11 tahun"),
+  
+  // Gunakan coerce agar Zod otomatis mengubah string/number jadi string sebelum dicheck
+  anak_ke: z.coerce.string().min(1, "Input jumlah anak"),
+  jumlah_saudara: z.coerce.string().min(1, "Input jumlah saudara"),
+  
+  alamat: z.string().min(5, "Alamat minimal 5 karakter"),
+  desa: z.string().min(1, "Desa wajib diisi"),
+  kecamatan: z.string().min(1, "Kecamatan wajib diisi"),
+  kabupaten: z.string().min(1, "Kabupaten wajib diisi"),
+  provinsi: z.string().min(1, "Provinsi wajib diisi"),
+  kode_pos: z.string().length(5, "Kode pos harus 5 digit"),
+}).refine((data) => {
+  // Logika tambahan: Anak ke tidak boleh lebih besar dari saudara
+  return parseInt(data.anak_ke) <= parseInt(data.jumlah_saudara)
+}, {
+  message: "Input 'Anak Ke' tidak boleh melebihi jumlah saudara",
+  path: ["anak_ke"]
+})
 
-const isFieldEmpty = (key) => {
-  const value = localData.value[key]
-  // Cek jika key masuk daftar wajib DAN (nilainya null/undefined ATAU string kosong setelah di-trim)
-  return mandatoryAlamat.includes(key) && (!value || value.toString().trim() === '')
-}
-
-// Fungsi Validasi (Akan dipanggil oleh Parent)
 const validate = () => {
-  const allMandatory = [
-    'nama_lengkap', 'jenjang_daftar', 'jenis_kelamin', 'agama', 'tempat_lahir', 'anak_ke', 'jumlah_saudara', 'tanggal_lahir', 'status_keluarga', ...mandatoryAlamat
-  ]
+  const result = santriSchema.safeParse(localData.value)
 
-  const isAnyEmpty = allMandatory.some(k => {
-    const val = localData.value[k]
-    return !val || val.toString().trim() === ''
-  })
-
-  return {
-    valid: !isAnyEmpty,
-    errors: isAnyEmpty ? ["Mohon lengkapi data yang bertanda bintang (*)"] : []
+  if (!result.success) {
+    // Menggunakan issues[0] agar aman dari deprecated warning
+    const firstMessage = result.error.issues[0]?.message || "Data santri belum lengkap"
+    return {
+      valid: false,
+      errors: [firstMessage]
+    }
   }
+
+  return { valid: true, errors: [] }
 }
 
-// Ekspos fungsi validate agar bisa diakses oleh parent menggunakan ref
 defineExpose({ validate })
 
+// --- LOGIC LAINNYA ---
 const filterNumber = (key, maxLength) => {
   localData.value[key] = String(localData.value[key] || '').replace(/\D/g, '').slice(0, maxLength)
 }
@@ -214,9 +235,20 @@ const handleInput = () => {
   localData.value.nama_lengkap = localData.value.nama_lengkap?.toUpperCase() 
 }
 
+// Untuk Highlight Merah di UI
+const mandatoryAlamat = ['alamat', 'desa', 'kecamatan', 'kabupaten', 'provinsi', 'kode_pos']
+const isFieldEmpty = (key) => {
+  const value = localData.value[key]
+  if (!mandatoryAlamat.includes(key)) return false
+  return !value || value.toString().trim() === '' || (key === 'kode_pos' && value.length < 5)
+}
+
 onMounted(() => {
   if (!localData.value.agama) localData.value.agama = 'Islam'
   if (!localData.value.negara) localData.value.negara = 'Indonesia'
+  // Pastikan field angka tidak undefined agar tidak crash di Zod
+  if (!localData.value.anak_ke) localData.value.anak_ke = ''
+  if (!localData.value.jumlah_saudara) localData.value.jumlah_saudara = ''
 })
 
 watch(localData, (newVal) => emit('update:modelValue', newVal), { deep: true })
@@ -225,7 +257,7 @@ watch(localData, (newVal) => emit('update:modelValue', newVal), { deep: true })
 <style scoped>
 .form-input {
   @apply w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 
-         outline-none transition-all duration-300 placeholder:text-slate-500
+         outline-none transition-all duration-300 placeholder:text-slate-400
          focus:bg-white/[0.07] focus:border-orange-500/50 focus:ring-4 focus:ring-orange-500/10;
 }
 
@@ -237,7 +269,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .label-form {
-  @apply text-[12px] font-semibold text-slate-400 uppercase tracking-widest;
+  @apply text-[12px] font-semibold text-slate-300 uppercase tracking-widest;
 }
 
 /* Style tambahan agar label lebih manis jika di-hover */

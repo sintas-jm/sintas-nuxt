@@ -1,30 +1,32 @@
-<script setup>
-  import { usePendaftaran } from '~/composables/usePendaftaran'
+<script setup lang="ts">
+import { usePendaftaran } from '~/composables/usePendaftaran'
 
-  const { periodeInfo, loading, kirimPendaftaran, fetchPeriode } = usePendaftaran()
+const { showToast } = useToast()
+const { periodeInfo, loading, kirimPendaftaran, fetchPeriode } = usePendaftaran()
 
-  onMounted(() => {
-    fetchPeriode()
-  })
+onMounted(() => {
+  fetchPeriode()
+})
 
-  const currentStep = ref(1)
-  const stepComponentRef = ref(null) // TAMBAHKAN INI: Untuk menangkap fungsi dari anak
-  const totalSteps = 5 // Tambah jadi 5
-  const stepTitles = [
-    'Biodata Santri', 
-    'Sekolah Asal', 
-    'Data Orang Tua', 
-    'Data Wali', 
-    'Konfirmasi Akhir'
-  ]
+const currentStep = ref(1)
+const totalSteps = 5
+const stepComponentRef = ref<{ validate: () => { valid: boolean, errors: string[] } } | null>(null)
 
-  const steps = [
-    resolveComponent('PendaftaranStepSantri'),
-    resolveComponent('PendaftaranStepSekolah'),
-    resolveComponent('PendaftaranStepOrangTua'),
-    resolveComponent('PendaftaranStepWali'),
-    resolveComponent('PendaftaranStepKonfirmasi')
-  ]
+const stepTitles = [
+  'Biodata Santri', 
+  'Sekolah Asal', 
+  'Data Orang Tua', 
+  'Data Wali', 
+  'Konfirmasi Akhir'
+]
+
+const steps = [
+  resolveComponent('PendaftaranStepSantri'),
+  resolveComponent('PendaftaranStepSekolah'),
+  resolveComponent('PendaftaranStepOrangTua'),
+  resolveComponent('PendaftaranStepWali'),
+  resolveComponent('PendaftaranStepKonfirmasi')
+]
 
   const masterForm = ref({
     // IDENTITAS PENDAFTARAN (Auto/System)
@@ -37,7 +39,7 @@
     nama_lengkap: '',
     tempat_lahir: '',
     tanggal_lahir: '',
-    jenis_kelamin: 'L',
+    jenis_kelamin: '',
     agama: 'Islam',
     anak_ke: 1,
     jumlah_saudara: 0,
@@ -133,63 +135,79 @@
     is_setuju: false
   })
 
-  // FUNGSI NAVIGASI UTAMA
-  const handleNavigation = () => {
-    // 1. Validasi Anak (Step 1, 2, 3, dst)
-    if (stepComponentRef.value?.validate) {
-      const { valid, errors } = stepComponentRef.value.validate()
-      
-      if (!valid) {
-        // Cukup ambil pesan pertama saja karena isinya sama
-        alert(errors[0] || "Mohon lengkapi data yang ditandai merah")
-        return 
-      }
-    }
-
-    // 2. Logika Loncat (Skip Wali)
-    const isSkipWali = currentStep.value === 3 && masterForm.value.penanggung_santri === 'Orang Tua'
-    
-    // 3. Logika Kirim atau Lanjut
-    if (currentStep.value === totalSteps || isSkipWali) {
-      if (currentStep.value === 5 && !masterForm.value.is_setuju) {
-        alert("Mohon dicentang persetujuan")
-        return
-      }
-      submitFinal()
-    } else {
-      currentStep.value++
-      if (process.client) window.scrollTo({ top: 0, behavior: 'smooth' })
+// FUNGSI NAVIGASI UTAMA
+const handleNavigation = () => {
+  // 1. Validasi Anak (Setiap Step)
+  if (stepComponentRef.value?.validate) {
+    const { valid, errors } = stepComponentRef.value.validate()
+    if (!valid) {
+      showToast(errors[0] || "Mohon lengkapi data", "error")
+      return 
     }
   }
 
-  const prevStep = () => {
-    if (currentStep.value > 1) {
-      currentStep.value--
-      if (process.client) window.scrollTo({ top: 0, behavior: 'smooth' })
+  // 2. Cek Kondisi Khusus (Skip Wali)
+  const isSkipWali = currentStep.value === 3 && masterForm.value.penanggung_santri === 'Orang Tua'
+
+  // 3. Logika Alur Navigasi
+  if (currentStep.value === totalSteps) {
+    // Jika sudah di step 5 (Final)
+    if (!masterForm.value.is_setuju) {
+      showToast("Mohon centang persetujuan sebelum mengirim", "info")
+      return
     }
+    submitFinal()
+  } else if (isSkipWali) {
+    // Jika dari Step 3 dan pilih Ortu -> Langsung ke Konfirmasi (Step 5)
+    currentStep.value = 5
+    scrollToTop()
+  } else {
+    // Lanjut ke step berikutnya secara normal
+    currentStep.value++
+    scrollToTop()
   }
+}
 
-  const generateID = () => {
-    const now = new Date()
-    const dateStr = now.toISOString().split('T')[0].replace(/-/g, '')
-    const random = Math.floor(1000 + Math.random() * 9000)
-    return `PSB-REG-${dateStr}-${random}`
+const prevStep = () => {
+  if (currentStep.value === 5 && masterForm.value.penanggung_santri === 'Orang Tua') {
+    currentStep.value = 3 // Lompat balik melewati wali
+  } else if (currentStep.value > 1) {
+    currentStep.value--
   }
+  scrollToTop()
+}
 
-  const submitFinal = async () => {
-    masterForm.value.id_pendaftar = generateID()
-    masterForm.value.id_psb = periodeInfo.value.id_psb
-    masterForm.value.timestamp_submit = new Date().toISOString()
-    
-    const hasil = await kirimPendaftaran(masterForm.value)
-    
-    if (hasil.success) {
-      alert("Data berhasil disimpan!")
+// Helper scroll agar lebih bersih
+const scrollToTop = () => {
+  if (import.meta.client) window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const generateID = () => {
+  const fullIsoString = new Date().toISOString()
+  // Tambahkan pengaman atau pastikan index 0 ada
+  const datePart = fullIsoString.split('T')[0] || '' 
+  const dateStr = datePart.replace(/-/g, '')
+  
+  const random = Math.floor(1000 + Math.random() * 9000)
+  return `PSB-REG-${dateStr}-${random}`
+}
+
+const submitFinal = async () => {
+  masterForm.value.id_pendaftar = generateID()
+  masterForm.value.id_psb = periodeInfo.value?.id_psb || ''
+  masterForm.value.timestamp_submit = new Date().toISOString()
+  
+  const hasil = await kirimPendaftaran(masterForm.value)
+  
+  if (hasil.success) {
+    showToast("Data pendaftaran berhasil disimpan!", "success")
+    setTimeout(() => {
       navigateTo('/publik/psb/rekap-pendaftar')
-    } else {
-      alert("Maaf, terjadi kendala: " + hasil.message)
-    }
+    }, 1500)
+  } else {
+    showToast(hasil.message || "Maaf, terjadi kendala teknis", "error")
   }
+}
 </script>
 
 <template>
@@ -257,8 +275,13 @@
             >
               <span v-if="loading" class="animate-spin text-lg">⏳</span>
               <template v-if="loading">Memproses...</template>
+              <!--
               <template v-else-if="currentStep === totalSteps || (currentStep === 3 && masterForm.penanggung_santri === 'Orang Tua')">
                 Kirim Pendaftaran <span class="text-lg">✅</span>
+              </template>
+              -->
+              <template v-else-if="currentStep === totalSteps">
+                Kirim Berkas <span class="text-lg">✅</span>
               </template>
               <template v-else>
                 Lanjut <span class="text-lg">→</span>

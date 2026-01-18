@@ -157,14 +157,19 @@
           <label class="md:col-span-3 label-form mt-3">Kontak WA *</label>
           <div class="md:col-span-9 space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input type="text" v-model="localData.hp_ayah" @input="filterNumber('hp_ayah', 15)" class="form-input" placeholder="HP Ayah (WhatsApp)">
-              <input type="text" v-model="localData.hp_ibu" @input="filterNumber('hp_ibu', 15)" class="form-input" placeholder="HP Ibu (WhatsApp)">
+              <input type="text" v-model="localData.hp_ayah" @input="filterNumber('hp_ayah', 15)" 
+                class="form-input" placeholder="HP Ayah (WhatsApp)"
+                :class="{ '!border-red-500/40 bg-red-500/5': localData.hp_ayah && localData.hp_ayah.length < 10 }">
+              
+              <input type="text" v-model="localData.hp_ibu" @input="filterNumber('hp_ibu', 15)" 
+                class="form-input" placeholder="HP Ibu (WhatsApp)"
+                :class="{ '!border-red-500/40 bg-red-500/5': localData.hp_ibu && localData.hp_ibu.length < 10 }">
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="relative">
                 <input type="text" v-model="localData.hp_informasi" @input="filterNumber('hp_informasi', 15)" 
                   class="form-input border-emerald-500/50 bg-emerald-500/5 text-emerald-100 font-bold" 
-                  placeholder="NOMOR WA UTAMA"
+                  placeholder="Kontak untuk informasi"
                   :class="{'!border-red-500/40 bg-red-500/5': !localData.hp_informasi || (localData.hp_informasi.length < 10)}">
                 <span class="absolute -top-2 left-3 bg-[#0f172a] px-2 text-[8px] text-emerald-400 font-black uppercase tracking-widest">Penting</span>
               </div>
@@ -186,80 +191,80 @@
 </template>
 
 <script setup>
-const props = defineProps(['modelValue'])
-const emit = defineEmits(['update:modelValue'])
-const localData = ref({ ...props.modelValue })
+  import { z } from 'zod'
+  const props = defineProps(['modelValue'])
+  const emit = defineEmits(['update:modelValue'])
+  const localData = ref({ ...props.modelValue })
 
-const handleUpper = (key) => {
-  if (localData.value[key]) localData.value[key] = localData.value[key].toUpperCase()
-}
+  const handleUpper = (key) => {
+    if (localData.value[key]) localData.value[key] = localData.value[key].toUpperCase()
+  }
 
-const filterNumber = (key, maxLength) => {
-  localData.value[key] = String(localData.value[key] || '').replace(/\D/g, '').slice(0, maxLength)
-}
+  const filterNumber = (key, maxLength) => {
+    localData.value[key] = String(localData.value[key] || '').replace(/\D/g, '').slice(0, maxLength)
+  }
 
-const maxDateOrtua = computed(() => `${new Date().getFullYear() - 25}-12-31`)
-const minDateOrtua = computed(() => `${new Date().getFullYear() - 80}-01-01`)
+  const maxDateOrtua = computed(() => `${new Date().getFullYear() - 25}-12-31`)
+  const minDateOrtua = computed(() => `${new Date().getFullYear() - 80}-01-01`)
 
-const copyAlamatSantri = () => {
-  localData.value.alamat_orangtua = localData.value.alamat
-  localData.value.desa_ortu = localData.value.desa
-  localData.value.kecamatan_ortu = localData.value.kecamatan
-  localData.value.kabupaten_ortu = localData.value.kabupaten
-  localData.value.provinsi_ortu = localData.value.provinsi
-  localData.value.kode_pos_ortu = localData.value.kode_pos
-}
+  const copyAlamatSantri = () => {
+    localData.value.alamat_orangtua = localData.value.alamat
+    localData.value.desa_ortu = localData.value.desa
+    localData.value.kecamatan_ortu = localData.value.kecamatan
+    localData.value.kabupaten_ortu = localData.value.kabupaten
+    localData.value.provinsi_ortu = localData.value.provinsi
+    localData.value.kode_pos_ortu = localData.value.kode_pos
+  }
 
-const validate = () => {
-  const mandatory = ['nama_ayah', 'nama_ibu', 'hp_informasi', 'email_ortu']
-  
-  // 1. Cek apakah ada yang kosong
-  const isAnyEmpty = mandatory.some(key => !localData.value[key]?.toString().trim())
-  
-  // 2. Cek panjang nomor HP Utama (Minimal 10 digit)
-  const hpValue = localData.value.hp_informasi ? String(localData.value.hp_informasi) : ''
-  const isHpTooShort = hpValue.length > 0 && hpValue.length < 10
+  const ortuSchema = z.object({
+    nama_ayah: z.string().min(3, "Nama Ayah wajib diisi"),
+    nama_ibu: z.string().min(3, "Nama Ibu wajib diisi"),
+    no_kk: z.string().optional().refine(val => !val || val.length === 16, {message: "Nomor KK harus tepat 16 digit"}),
+    nik_ayah: z.string().optional().refine(val => !val || val.length === 16, {message: "NIK Ayah harus tepat 16 digit"}),
+    nik_ibu: z.string().optional().refine(val => !val || val.length === 16, {message: "NIK Ibu harus tepat 16 digit"}),
+    email_ortu: z.email("Format email tidak valid"),
+    hp_informasi: z.string().min(10, "WA Utama minimal 10 digit").max(15),
+    hp_ayah: z.string().optional().refine(val => !val || val.length >= 10, "HP Ayah minimal 10 digit"),
+    hp_ibu: z.string().optional().refine(val => !val || val.length >= 10, "HP Ibu minimal 10 digit"),
+  })
 
-  if (isHpTooShort) {
-    return {
-      valid: false,
-      errors: ["Nomor WA Utama tidak valid (Minimal 10 digit)"]
+  const validate = () => {
+    const result = ortuSchema.safeParse(localData.value)
+    if (!result.success) {
+      const flattened = result.error.flatten().fieldErrors
+      const firstKey = Object.keys(flattened)[0]
+      return { valid: false, errors: [flattened[firstKey][0]] }
     }
+    return { valid: true, errors: [] }
   }
 
-  return {
-    valid: !isAnyEmpty,
-    errors: isAnyEmpty ? ["Nama Orang Tua & Kontak WA wajib diisi lengkap"] : []
-  }
-}
+  defineExpose({ validate })
 
-defineExpose({ validate })
-
-watch(localData, (newVal) => emit('update:modelValue', newVal), { deep: true })
+  watch(localData, (newVal) => emit('update:modelValue', newVal), { deep: true })
 </script>
 
 <style scoped>
-.form-input {
-  @apply w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 
-         outline-none transition-all duration-300 placeholder:text-slate-500
-         focus:bg-white/[0.07] focus:border-orange-500/50 focus:ring-4 focus:ring-orange-500/10;
-}
+  .form-input {
+    @apply w-full bg-white/[0.03] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 
+          outline-none transition-all duration-300 placeholder:text-slate-500
+          focus:bg-white/[0.07] focus:border-orange-500/50 focus:ring-4 focus:ring-orange-500/10;
+  }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-  opacity: 0.5;
-}
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.5;
+  }
 
-select option {
-  @apply bg-[#0f172a] text-white/80;
-}
+  select option {
+    @apply bg-[#0f172a] text-white/80;
+  }
 
-.label-form {
-  @apply text-[12px] font-semibold text-slate-400 uppercase tracking-widest;
-}
+  .label-form {
+    @apply text-[12px] font-semibold text-slate-300 uppercase tracking-widest;
+  }
 
-/* Style tambahan agar label lebih manis jika di-hover */
-.label-form:hover {
-  @apply text-slate-300 transition-colors duration-300;
-}
+  /* Style tambahan agar label lebih manis jika di-hover */
+  .label-form:hover {
+    @apply text-slate-300 transition-colors duration-300;
+  }
 </style>

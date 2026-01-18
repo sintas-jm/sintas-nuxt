@@ -1,10 +1,10 @@
 <script setup>
-const nuxtApp = useNuxtApp()
-const loading = ref(false)
+  const nuxtApp = useNuxtApp()
+  const loading = ref(false)
 
-// Hook Nuxt untuk mendeteksi navigasi
-nuxtApp.hook('page:start', () => { loading.value = true })
-nuxtApp.hook('page:finish', () => { loading.value = false })
+  // Hook Nuxt untuk mendeteksi navigasi
+  nuxtApp.hook('page:start', () => { loading.value = true })
+  nuxtApp.hook('page:finish', () => { loading.value = false })
 </script>
 
 <template>
@@ -22,6 +22,6 @@ nuxtApp.hook('page:finish', () => { loading.value = false })
 </template>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+  .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+  .fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>

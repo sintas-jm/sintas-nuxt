@@ -22,7 +22,7 @@ const logout = () => {
 
         <div class="flex items-center gap-2 md:gap-4">
           <nav class="hidden md:flex items-center gap-1">
-            <NuxtLink to="/pendaftaran" class="nav-item">Pendaftaran</NuxtLink>
+            <NuxtLink to="/publik/psb" class="nav-item">Pendaftaran</NuxtLink>
             <NuxtLink to="/presensi" class="nav-item">Presensi</NuxtLink>
             <NuxtLink to="/informasi" class="nav-item">Informasi</NuxtLink>
           </nav>
