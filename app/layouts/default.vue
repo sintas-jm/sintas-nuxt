@@ -47,7 +47,7 @@ const logout = () => {
       </div>
     </nav>
 
-    <main class="w-full px-4 md:px-8 py-8">
+    <main class="w-full p-4 md:px-8 md:py-6">
       <slot />
     </main>
 
@@ -100,5 +100,9 @@ const logout = () => {
   opacity: 0;
   transform: translateY(10px);
   filter: blur(10px);
+}
+
+.page-heading-1 {
+  @apply text-orange-400/80 text-[11px] font-bold uppercase tracking-[0.3em]
 }
 </style>

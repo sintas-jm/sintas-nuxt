@@ -7,8 +7,8 @@
           08
         </div>
         <div>
-          <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Data Wali Santri</h3>
-          <p class="text-[10px] text-slate-500 uppercase tracking-widest">Diisi jika santri tidak tinggal bersama orang tua</p>
+          <h3 class="text-sm font-bold text-orange-200 uppercase tracking-[0.2em]">Data Wali Santri</h3>
+          <p class="text-[10px] text-slate-300 uppercase tracking-widest">Diisi jika santri tidak tinggal bersama orang tua</p>
         </div>
       </div>
       
@@ -152,7 +152,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .label-form {
-  @apply text-[12px] font-semibold text-slate-300 uppercase tracking-widest;
+  @apply text-[12px] font-semibold text-slate-200 uppercase tracking-widest;
 }
 
 /* Style tambahan agar label lebih manis jika di-hover */

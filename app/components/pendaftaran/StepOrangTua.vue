@@ -8,8 +8,8 @@
           05
         </div>
         <div>
-          <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Data Ayah Kandung</h3>
-          <p class="text-[10px] text-slate-500 uppercase tracking-widest">Informasi identitas dan profil ayah</p>
+          <h3 class="text-sm font-bold text-orange-200 uppercase tracking-[0.2em]">Data Ayah Kandung</h3>
+          <p class="text-[10px] text-slate-300 uppercase tracking-widest">Informasi identitas dan profil ayah</p>
         </div>
       </div>
       
@@ -61,8 +61,8 @@
           06
         </div>
         <div>
-          <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Data Ibu Kandung</h3>
-          <p class="text-[10px] text-slate-500 uppercase tracking-widest">Informasi identitas dan profil ibu</p>
+          <h3 class="text-sm font-bold text-orange-200 uppercase tracking-[0.2em]">Data Ibu Kandung</h3>
+          <p class="text-[10px] text-slate-300 uppercase tracking-widest">Informasi identitas dan profil ibu</p>
         </div>
       </div>
 
@@ -123,8 +123,8 @@
             07
           </div>
           <div>
-            <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Domisili & Kontak</h3>
-            <p class="text-[10px] text-slate-500 uppercase tracking-widest">Alamat dan nomor WhatsApp aktif</p>
+            <h3 class="text-sm font-bold text-orange-200 uppercase tracking-[0.2em]">Domisili & Kontak</h3>
+            <p class="text-[10px] text-slate-300 uppercase tracking-widest">Alamat dan nomor WhatsApp aktif</p>
           </div>
         </div>
         <button type="button" @click="copyAlamatSantri" 
@@ -260,7 +260,7 @@
   }
 
   .label-form {
-    @apply text-[12px] font-semibold text-slate-300 uppercase tracking-widest;
+    @apply text-[12px] font-semibold text-slate-200 uppercase tracking-widest;
   }
 
   /* Style tambahan agar label lebih manis jika di-hover */

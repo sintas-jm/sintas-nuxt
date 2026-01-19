@@ -5,6 +5,11 @@ Sistem Integrasi Data Santri Matlabus Salik
 
 log update :
 
+v1.4.3
+  - add UI rekap pendaftar
+  - add print rekap pendaftar
+  - fix dinamic header pendaftaran
+
 v1.4.2
   - perbaikan validasi perndaftaran menggunakan zod
   - menambah UI toast
@@ -14,7 +19,8 @@ v1.4.1
   - menambah validasi pendaftaran
 
 v1.4.0
-  - add form pendaftaran via internal link
+  - add menu form pendaftaran via internal link
+  - add menu rekap pendaftar
   - perbaikan ui piket imam
 
 v1.3.0

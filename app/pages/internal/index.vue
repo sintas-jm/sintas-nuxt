@@ -15,7 +15,7 @@ const staffName = ref('Kakak Admin') // Nanti bisa dinamis
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <NuxtLink to="/publik/psb" 
-        class="group p-4 glass-card btn-hover rounded-2xl transition-all duration-500 relative overflow-hidden block">
+        class="group p-4 glass-card btn-hover rounded-xl transition-all duration-500 relative overflow-hidden block">
         <div class="relative z-10 flex items-start gap-5"> 
           <div class="shrink-0 w-12 h-12 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-xl flex items-center justify-center text-2xl shadow-xl group-hover:scale-110 transition-transform">
             📂
@@ -29,7 +29,7 @@ const staffName = ref('Kakak Admin') // Nanti bisa dinamis
       </NuxtLink>
 
       <NuxtLink to="/internal/jadwal/piket-imam" 
-        class="group p-4 glass-card btn-hover rounded-2xl transition-all duration-500 relative overflow-hidden block">
+        class="group p-4 glass-card btn-hover rounded-xl transition-all duration-500 relative overflow-hidden block">
         <div class="relative z-10 flex items-start gap-5"> 
           <div class="shrink-0 w-12 h-12 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-xl flex items-center justify-center text-2xl shadow-xl group-hover:scale-110 transition-transform">
             🕌
@@ -39,9 +39,10 @@ const staffName = ref('Kakak Admin') // Nanti bisa dinamis
             <p class="text-slate-400 text-xs leading-relaxed tracking-wide">Piket imam rawatib harian.</p>
           </div>
         </div>
+        <div class="absolute -right-2 -bottom-2 text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">🕌</div>
       </NuxtLink>
 
-      <div class="p-4 glass-card opacity-50 rounded-2xl relative overflow-hidden cursor-not-allowed">
+      <div class="p-4 glass-card opacity-50 rounded-xl relative overflow-hidden cursor-not-allowed">
         <div class="relative z-10 flex items-start gap-5">
           <div class="shrink-0 w-12 h-12 bg-slate-800 text-slate-500 border border-slate-700 rounded-xl flex items-center justify-center text-2xl">
             🔒

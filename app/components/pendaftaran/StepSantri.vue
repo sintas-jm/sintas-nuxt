@@ -7,8 +7,8 @@
           01
         </div>
         <div>
-          <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Identitas Calon Santri</h3>
-          <p class="text-[10px] text-slate-500 uppercase tracking-widest">Informasi dasar sesuai akta kelahiran</p>
+          <h3 class="text-sm font-bold text-orange-200 uppercase tracking-[0.2em]">Identitas Calon Santri</h3>
+          <p class="text-[10px] text-slate-300 uppercase tracking-widest">Informasi dasar sesuai akta kelahiran</p>
         </div>
       </div>
       
@@ -87,8 +87,8 @@
           02
         </div>
         <div>
-          <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Wilayah Domisili</h3>
-          <p class="text-[10px] text-slate-500 uppercase tracking-widest">Alamat tempat tinggal saat ini</p>
+          <h3 class="text-sm font-bold text-orange-200 uppercase tracking-[0.2em]">Wilayah Domisili</h3>
+          <p class="text-[10px] text-slate-300 uppercase tracking-widest">Alamat tempat tinggal saat ini</p>
         </div>
       </div>
       
@@ -124,8 +124,8 @@
           03
         </div>
         <div>
-          <h3 class="text-sm font-bold text-white uppercase tracking-[0.2em]">Jasmani & Hobi</h3>
-          <p class="text-[10px] text-slate-500 uppercase tracking-widest">Kondisi fisik dan minat santri</p>
+          <h3 class="text-sm font-bold text-orange-200 uppercase tracking-[0.2em]">Jasmani & Hobi</h3>
+          <p class="text-[10px] text-slate-300 uppercase tracking-widest">Kondisi fisik dan minat santri</p>
         </div>
       </div>
       
@@ -269,7 +269,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .label-form {
-  @apply text-[12px] font-semibold text-slate-300 uppercase tracking-widest;
+  @apply text-[12px] font-semibold text-slate-200 uppercase tracking-widest;
 }
 
 /* Style tambahan agar label lebih manis jika di-hover */

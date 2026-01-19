@@ -4,8 +4,23 @@ import { usePendaftaran } from '~/composables/usePendaftaran'
 const { showToast } = useToast()
 const { periodeInfo, loading, kirimPendaftaran, fetchPeriode } = usePendaftaran()
 
-onMounted(() => {
-  fetchPeriode()
+// Ambil state loading dari GlobalLoading
+const dataLoading = useState('global_data_loading')
+const loadingText = useState('global_loading_text')
+
+onMounted(async () => {
+  // Hanya tampilkan loading jika data periode belum ada
+  if (!periodeInfo.value.id_psb) {
+    dataLoading.value = true
+    loadingText.value = 'Menyingkronkan Jadwal PSB...'
+    
+    await fetchPeriode()
+    
+    // Berikan sedikit delay 300ms agar transisi tidak terlalu kaget
+    setTimeout(() => {
+      dataLoading.value = false
+    }, 300)
+  }
 })
 
 const currentStep = ref(1)
@@ -183,14 +198,46 @@ const scrollToTop = () => {
 }
 
 const generateID = () => {
+  const now = new Date()
+
+  // Ambil Tanggal, Jam, dan Menit dalam zona waktu Asia/Jakarta
+  // Format: "18012026-1508" (Tanggal-Bulan-Tahun-JamMenit)
+  const formatter = new Intl.DateTimeFormat('id-ID', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  })
+
+  const parts = formatter.formatToParts(now)
+  const d = parts.find(p => p.type === 'day')!.value
+  const m = parts.find(p => p.type === 'month')!.value
+  const y = parts.find(p => p.type === 'year')!.value
+  const hr = parts.find(p => p.type === 'hour')!.value
+  const min = parts.find(p => p.type === 'minute')!.value
+
+  const dateStr = `${y}${m}${d}` // Hasil: 20260118
+  const timeStr = `${hr}${min}`   // Hasil: 1508 (WIB)
+  const random = Math.floor(1000 + Math.random() * 9000)
+
+  // Hasil Akhir: PSB-REG-20260118-1508-9432
+  return `PSB-REG-${dateStr}-${timeStr}-${random}`
+}
+
+/*
+const generateID = () => {
   const fullIsoString = new Date().toISOString()
   // Tambahkan pengaman atau pastikan index 0 ada
   const datePart = fullIsoString.split('T')[0] || '' 
   const dateStr = datePart.replace(/-/g, '')
-  
   const random = Math.floor(1000 + Math.random() * 9000)
+
   return `PSB-REG-${dateStr}-${random}`
 }
+*/
 
 const submitFinal = async () => {
   masterForm.value.id_pendaftar = generateID()
@@ -212,11 +259,30 @@ const submitFinal = async () => {
 
 <template>
   <div class="max-w-[1440] mx-auto pb-20">
+
+    <div v-if="!periodeInfo.status_aktif" class="mt-20 flex flex-col items-center text-center px-4">
+      <div class="w-24 h-24 bg-red-500/10 border border-red-500/20 rounded-3xl flex items-center justify-center text-4xl mb-6 animate-bounce">
+        🔒
+      </div>
+      <h1 class="text-3xl font-bold text-white mb-2 uppercase tracking-tighter">
+        Pendaftaran
+        <span class="text-red-500">Ditutup</span>
+      </h1>
+      <p class="text-slate-400 max-w-md leading-relaxed">
+        {{ periodeInfo.note_status || 'Mohon maaf, saat ini pendaftaran santri baru belum dibuka atau telah berakhir. Silakan hubungi sekretariat pendaftaran.' }}
+      </p>
+      
+      <NuxtLink to="/" class="mt-8 px-8 py-3 bg-white/5 border border-white/10 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-all text-slate-300">
+        Kembali ke Beranda
+      </NuxtLink>
+    </div>
+
+    <template v-else-if="!dataLoading && periodeInfo.status_aktif">
     <header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
-        <h2 class="text-orange-400/80 text-[11px] font-bold tracking-[0.4em] uppercase mb-2">Pendaftaran Santri</h2>
-        <h1 class="text-xl font-light tracking-tight text-white uppercase">
-          Langkah <span class="font-bold text-orange-200">{{ currentStep }}</span> <span class="text-slate-500">/ {{ totalSteps }}</span>
+        <h2 class="page-heading-1 mb-2">{{ periodeInfo.nama_psb }}</h2>
+        <h1 class="text-lg font-light tracking-tight text-white uppercase">
+          Langkah <span class="font-semibold text-orange-200">{{ currentStep }}</span> <span class="text-slate-500">/ {{ totalSteps }}</span>
         </h1>
         <p class="text-sm text-slate-400 mt-1 italic">{{ stepTitles[currentStep-1] }}</p>
       </div>
@@ -236,7 +302,7 @@ const submitFinal = async () => {
     </header>
 
     <div class="glass-card rounded-xl border border-white/10 overflow-hidden shadow-2xl">
-      <div class="px-3 md:px-8 py-4 bg-orange-500/5 border-b border-white/5 flex items-center gap-4">
+      <div class="p-2 md:px-8 md:py-4 bg-orange-500/5 border-b border-white/5 flex items-center gap-4">
         <div class="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center text-xl">📝</div>
         <div class="space-y-1">
           <h4 class="text-xs font-bold text-orange-200 uppercase tracking-widest">Periode Aktif</h4>
@@ -244,7 +310,7 @@ const submitFinal = async () => {
         </div>
       </div>
 
-      <div class="p-3 md:px-8 md:py-4 min-h-[400px]">
+      <div class="p-2 md:px-8 md:py-4 min-h-[400px]">
         <form @submit.prevent="handleNavigation">
           <KeepAlive>
             <component 
@@ -291,5 +357,6 @@ const submitFinal = async () => {
         </form>
       </div>
     </div>
+    </template>
   </div>
 </template>
