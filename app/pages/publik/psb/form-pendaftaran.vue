@@ -3,11 +3,13 @@ import { usePendaftaran } from '~/composables/usePendaftaran'
 
 const { showToast } = useToast()
 const { periodeInfo, loading, kirimPendaftaran, fetchPeriode } = usePendaftaran()
+const { startAction, stopAction } = useActionLoading()
 
 // Ambil state loading dari GlobalLoading
 const dataLoading = useState('global_data_loading')
 const loadingText = useState('global_loading_text')
 
+/*
 onMounted(async () => {
   // Hanya tampilkan loading jika data periode belum ada
   if (!periodeInfo.value.id_psb) {
@@ -20,6 +22,20 @@ onMounted(async () => {
     setTimeout(() => {
       dataLoading.value = false
     }, 300)
+  }
+})
+*/
+
+onMounted(async () => {
+  if (!periodeInfo.value.id_psb) {
+    startAction('Menyingkronkan Jadwal PSB...')
+    
+    await fetchPeriode()
+    
+    // Berikan jeda sedikit agar tidak "flicker"
+    setTimeout(() => {
+      stopAction()
+    }, 500)
   }
 })
 
@@ -240,21 +256,40 @@ const generateID = () => {
 */
 
 const submitFinal = async () => {
+  // 1. Persiapkan Data
   masterForm.value.id_pendaftar = generateID()
   masterForm.value.id_psb = periodeInfo.value?.id_psb || ''
   masterForm.value.timestamp_submit = new Date().toISOString()
   
-  const hasil = await kirimPendaftaran(masterForm.value)
+  // 2. Aktifkan Overlay Global
+  startAction('Sedang Mengirim Data Pendaftaran...')
   
-  if (hasil.success) {
-    showToast("Data pendaftaran berhasil disimpan!", "success")
-    setTimeout(() => {
+  try {
+    const hasil = await kirimPendaftaran(masterForm.value)
+    
+    if (hasil.success) {
+      showToast("Data pendaftaran berhasil disimpan!", "success")
+      
+      // 3. Navigasi langsung (GlobalLoading tetap aktif karena hook 'page:start')
       navigateTo('/publik/psb/rekap-pendaftar')
-    }, 1500)
-  } else {
-    showToast(hasil.message || "Maaf, terjadi kendala teknis", "error")
+      
+      // Kita tidak panggil stopAction() agar overlay menutupi 
+      // proses loading halaman rekap sampai selesai.
+    } else {
+      stopAction() // Matikan jika gagal agar user bisa cek form lagi
+      showToast(hasil.message || "Maaf, terjadi kendala teknis", "error")
+    }
+  } catch (err) {
+    stopAction()
+    showToast("Terjadi kesalahan sistem", "error")
   }
 }
+
+/* Letakkan di bagian bawah bersama hooks lainnya, gunakan jika loading tidak berhenti
+onUnmounted(() => {
+  stopAction()
+})
+*/
 </script>
 
 <template>

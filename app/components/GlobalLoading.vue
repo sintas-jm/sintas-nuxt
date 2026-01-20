@@ -33,7 +33,7 @@ const isVisible = computed(() => pageLoading.value || dataLoading.value)
   .fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>
 
-<!--
+<!-- statis hanya page loading
 <script setup>
   const nuxtApp = useNuxtApp()
   const loading = ref(false)

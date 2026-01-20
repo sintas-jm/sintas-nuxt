@@ -4,6 +4,10 @@ Sistem Integrasi Data Santri Matlabus Salik
 ------------------------------------------------------------------
 
 log update :
+v1.5.1
+  - add UI loading action
+  - add UI loading action ke data audit & submit pendaftaran
+  - fix format value
 
 v1.5.0
   - add fitur staff : edit pendaftar

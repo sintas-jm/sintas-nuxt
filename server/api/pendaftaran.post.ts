@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
 
     // Kirim ke GAS dengan menyertakan action pendaftaran
     // Karena di doPost GAS kita buat default-nya adalah handlePendaftaranSantri,
-    // kita bisa mengirimkan body langsung atau memberikan action eksplisit.
+    // bisa mengirimkan body langsung atau memberikan action eksplisit.
     const response: any = await $fetch(config.gasUrlBackend, {
       method: 'POST',
       body: {

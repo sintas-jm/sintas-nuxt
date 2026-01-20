@@ -4,6 +4,7 @@ import StepSantri from '~/components/pendaftaran/StepSantri.vue'
 import StepOrangTua from '~/components/pendaftaran/StepOrangTua.vue'
 import StepSekolah from '~/components/pendaftaran/StepSekolah.vue'
 import StepWali from '~/components/pendaftaran/StepWali.vue'
+import { useActionLoading } from '~/composables/useActionLoading'
 
 definePageMeta({ layout: 'internal' })
 
@@ -12,6 +13,7 @@ const router = useRouter()
 const { pendaftarList, fetchRekap } = useRekap()
 const { periodeInfo, updatePendaftar } = usePendaftaran()
 const { showToast } = useToast() 
+const { startAction, stopAction } = useActionLoading()
 
 const formData = ref<any>(null)
 const isSaving = ref(false)
@@ -64,6 +66,18 @@ onMounted(async () => {
       cleanedData.updated_by = ''
     }
 
+    const fieldsToString = [
+      'no_kk', 'nisn', 'anak_ke', 'jumlah_saudara', 'tinggi_badan', 'berat_badan', 'kode_pos', 
+      'nik_ayah', 'nik_ibu', 'kode_pos_ortu', 'penghasilan_bulanan', 'hp_ayah', 'hp_ibu', 'hp_informasi', 'tahun_lulus', 'telp_rumah',
+      'kode_pos_wali', 'hp_wali', 'telp_rumah_wali'
+    ]
+
+    fieldsToString.forEach(field => {
+      if (cleanedData[field] !== undefined && cleanedData[field] !== null) {
+        cleanedData[field] = String(cleanedData[field])
+      }
+    })
+
     formData.value = cleanedData
   } else {
     router.push('/internal/psb/pendaftar')
@@ -108,7 +122,8 @@ const handleUpdate = async () => {
 
   // 3. Proses Pengiriman
   isSaving.value = true
-  formData.value.updated_at = new Date().toLocaleString('id-ID')
+  startAction('Sedang Memperbarui Data...')
+  formData.value.updated_at = new Date().toISOString()
 
   try {
     const result = await updatePendaftar(formData.value)
@@ -116,22 +131,30 @@ const handleUpdate = async () => {
     if (result.success) {
       showToast(`Data ${formData.value.nama_lengkap} berhasil diperbarui!`, 'success')
       
-      const { fetchRekap } = useRekap()
+      // Refresh data rekap agar saat pindah halaman data sudah baru
       await fetchRekap() 
       
-      // Beri sedikit delay agar user sempat melihat toast sukses sebelum pindah halaman
-      setTimeout(() => {
-        router.push('/internal/psb/pendaftar')
-      }, 1500)
+      // Pindah halaman
+      // Saat router.push jalan, Nuxt memicu 'page:start' (GlobalLoading tetap aktif)
+      router.push('/internal/psb/pendaftar')
+      
+      // Kita tidak perlu memanggil stopAction() di sini jika navigasi berhasil,
+      // karena 'page:finish' akan otomatis menutup overlay saat halaman tujuan siap.
     } else {
+      stopAction() // Matikan overlay jika gagal agar user bisa perbaiki input
       showToast(result.message || "Gagal memperbarui data", "error")
     }
   } catch (err) {
+    stopAction()
     showToast("Terjadi kesalahan sistem", "error")
+
   } finally {
     isSaving.value = false
   }
 }
+
+// Pastikan loading benar-benar berhenti saat komponen dihancurkan (pindah halaman)
+/* onUnmounted(() => {stopAction()}) */
 </script>
 
 <template>
