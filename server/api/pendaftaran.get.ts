@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   if (!config.gasUrlBackend) {
     throw createError({
       statusCode: 500,
-      statusMessage: 'Variabel GAS_URL_BACKEND belum terpasang di .env'
+      statusMessage: 'Gagal menghubungi server database (GAS)'
     })
   }
 

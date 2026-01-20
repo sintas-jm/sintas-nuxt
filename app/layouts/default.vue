@@ -23,8 +23,8 @@ const logout = () => {
         <div class="flex items-center gap-2 md:gap-4">
           <nav class="hidden md:flex items-center gap-1">
             <NuxtLink to="/publik/psb" class="nav-item">Pendaftaran</NuxtLink>
-            <NuxtLink to="/presensi" class="nav-item">Presensi</NuxtLink>
-            <NuxtLink to="/informasi" class="nav-item">Informasi</NuxtLink>
+            <NuxtLink to="/internal/presensi" class="nav-item">Presensi</NuxtLink>
+            <NuxtLink to="/publik/informasi" class="nav-item">Informasi</NuxtLink>
           </nav>
 
           <div class="w-px h-4 bg-orange-900/30 hidden md:block mx-2"></div>

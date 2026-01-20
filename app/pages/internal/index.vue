@@ -14,7 +14,7 @@ const staffName = ref('Kakak Admin') // Nanti bisa dinamis
     </header>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <NuxtLink to="/publik/psb" 
+      <NuxtLink to="/internal/psb" 
         class="group p-4 glass-card btn-hover rounded-xl transition-all duration-500 relative overflow-hidden block">
         <div class="relative z-10 flex items-start gap-5"> 
           <div class="shrink-0 w-12 h-12 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-xl flex items-center justify-center text-2xl shadow-xl group-hover:scale-110 transition-transform">

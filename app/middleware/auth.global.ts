@@ -1,4 +1,3 @@
-// app/middleware/auth.global.ts
 export default defineNuxtRouteMiddleware((to) => {
   const pinCookie = useCookie('auth_pin')
 

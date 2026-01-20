@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'default' })
+definePageMeta({ layout: 'internal' })
 
 const { periodeInfo, fetchPeriode } = usePendaftaran()
 const { pendaftarList, fetchRekap } = useRekap() // Gunakan composable baru
@@ -47,7 +47,7 @@ const handlePrint = (item: any) => {
   localStorage.setItem('print_data_formulir', JSON.stringify(item))
   
   // Buka tab baru ke halaman print
-  window.open('/print/formulir', '_blank')
+  window.open('/internal/psb/print-formulir', '_blank')
 }
 </script>
 
@@ -58,7 +58,7 @@ const handlePrint = (item: any) => {
         <h2 class="page-heading-1 mb-2">{{ periodeInfo.nama_psb }}</h2>
         <h1 class="text-lg font-light">Rekap <span class="font-semibold text-orange-200 tracking-normal">Pendaftar</span></h1>
       </div>
-      <NuxtLink to="/publik/psb" class="text-[10px] px-5 py-2 bg-white/5 border border-white/10 hover:bg-white/10 rounded-full transition-all uppercase tracking-widest font-bold">
+      <NuxtLink to="/internal/psb" class="text-[10px] px-5 py-2 bg-white/5 border border-white/10 hover:bg-white/10 rounded-full transition-all uppercase tracking-widest font-bold">
         ← Kembali
       </NuxtLink>
     </header>
@@ -94,9 +94,14 @@ const handlePrint = (item: any) => {
       <div v-for="item in filteredPendaftar" :key="item.id_pendaftar" 
         class="glass-card rounded-xl p-2 md:px-8 md:py-4 border border-white/5 flex md:grid md:grid-cols-12 items-center justify-between hover:border-white/20 transition-all group">
         
-        <div class="flex items-center gap-3 md:col-span-6 min-w-0">
+        <div class="flex items-center gap-3 md:col-span-5 min-w-0">
+          
+          <button @click="handlePrint(item)"
+                  class="md:hidden w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 border border-white/10 shrink-0">
+            <span class="text-xs">🖨️</span>
+          </button>
 
-          <div class="w-7 h-7 md:w-9 md:h-9 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-xs font-bold text-white border border-white/10 shrink-0">
+          <div class="hidden md:flex w-9 h-9 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 items-center justify-center text-xs font-bold text-white border border-white/10 shrink-0">
             {{ (item.nama_lengkap || '?').substring(0, 1) }}
           </div>
 
@@ -128,10 +133,17 @@ const handlePrint = (item: any) => {
           <span class="text-[11px] text-slate-300 truncate pr-4">{{ item.kabupaten }}</span>
         </div>
 
-        <div class="hidden md:flex md:col-span-2 justify-end">
+        <div class="hidden md:flex md:col-span-2 justify-start">
           <span :class="['px-2 py-0.5 rounded text-[10px] font-bold border uppercase tracking-tighter shadow-sm', getStatusClass(item.status_pendaftaran)]">
             {{ item.status_pendaftaran || 'Proses Verifikasi' }}
           </span>
+        </div>
+
+        <div class="hidden md:flex md:col-span-1 justify-end">
+          <button @click="handlePrint(item)"
+                  class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-slate-400 hover:bg-orange-500 hover:text-white transition-all border border-white/10">
+            <span class="text-base">🖨️</span>
+          </button>
         </div>
 
       </div>

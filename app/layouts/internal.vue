@@ -84,4 +84,8 @@ const logout = () => {
   opacity: 0;
   filter: blur(5px);
 }
+
+.page-heading-1 {
+  @apply text-orange-400/80 text-[11px] font-bold uppercase tracking-[0.3em]
+}
 </style>
