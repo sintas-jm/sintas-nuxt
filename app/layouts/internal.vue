@@ -67,6 +67,31 @@ const logout = () => {
   border: 1px solid rgba(249, 115, 22, 0.1);
 }
 
+.btn-head {
+  @apply px-3 py-2 text-[10px] uppercase tracking-widest text-slate-100 border border-white/5 rounded-full transition-all duration-300;
+  &:hover {
+    @apply text-orange-400 
+           bg-orange-500/10 
+           border-orange-500/40 
+           shadow-[0_0_30px_rgba(249,115,22,0.15)] 
+           -translate-y-0.5;
+  }
+}
+
+.btn-body {
+  @apply p-3 md:p-4 rounded-xl duration-500 relative overflow-hidden block border border-white/5 transition-all;
+  &:hover {
+    @apply bg-orange-500/10 
+           border-orange-500/40 
+           shadow-[0_0_30px_rgba(249,115,22,0.15)] 
+           -translate-y-0.5;
+  }
+}
+
+.emoji-btn {
+  @apply shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-xl group-hover:scale-110 transition-transform duration-500
+}
+
 .btn-hover:hover {
   background: rgba(249, 115, 22, 0.1);
   border: 1px solid rgba(249, 115, 22, 0.4);

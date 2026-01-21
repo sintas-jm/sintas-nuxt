@@ -9,6 +9,7 @@ const logout = () => {
 </script>
 
 <template>
+<!--Tema Glassmorphism dan Dark Mode-->
   <div class="default-layout min-h-screen">
     <nav class="border-b border-orange-900/30 bg-black/5 backdrop-blur-md sticky top-0 z-50">
       <div class="w-full px-4 md:px-8 py-4 flex justify-between items-center">
@@ -23,7 +24,7 @@ const logout = () => {
         <div class="flex items-center gap-2 md:gap-4">
           <nav class="hidden md:flex items-center gap-1">
             <NuxtLink to="/publik/psb" class="nav-item">Pendaftaran</NuxtLink>
-            <NuxtLink to="/internal/presensi" class="nav-item">Presensi</NuxtLink>
+            <NuxtLink to="/publik/informasi" class="nav-item">Presensi</NuxtLink>
             <NuxtLink to="/publik/informasi" class="nav-item">Informasi</NuxtLink>
           </nav>
 
@@ -81,6 +82,31 @@ const logout = () => {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(249, 115, 22, 0.1);
+}
+
+.btn-head {
+  @apply px-3 py-2 text-[10px] uppercase tracking-widest text-slate-100 border border-white/5 rounded-full transition-all duration-300;
+  &:hover {
+    @apply text-orange-400 
+           bg-orange-500/10 
+           border-orange-500/40 
+           shadow-[0_0_30px_rgba(249,115,22,0.15)] 
+           -translate-y-0.5;
+  }
+}
+
+.btn-body {
+  @apply  p-3 md:p-4 rounded-xl duration-500 relative overflow-hidden block border border-white/5 transition-all;
+  &:hover {
+    @apply bg-orange-500/10 
+           border-orange-500/40 
+           shadow-[0_0_30px_rgba(249,115,22,0.15)] 
+           -translate-y-0.5;
+  }
+}
+
+.emoji-btn {
+  @apply shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-xl group-hover:scale-110 transition-transform duration-500
 }
 
 .btn-hover:hover {

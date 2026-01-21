@@ -292,7 +292,7 @@ const handlePrintAction = () => {
 .title-area h3 { margin: 0; font-size: 11pt; }
 
 .section-header { 
-  background: #f0f0f0 !important; 
+  background: #ccc !important; 
   -webkit-print-color-adjust: exact; 
   padding: 4px 10px; 
   font-weight: bold; 

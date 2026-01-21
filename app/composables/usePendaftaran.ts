@@ -21,7 +21,7 @@ export const usePendaftaran = () => {
     }
   }
 
-  // FUNGSI BARU UNTUK UPDATE (MATCHING STYLE)
+  // FUNGSI UNTUK UPDATE (MATCHING STYLE)
   const updatePendaftar = async (payload: any) => {
     loading.value = true
     error.value = null

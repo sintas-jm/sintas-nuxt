@@ -58,9 +58,10 @@ const handlePrint = (item: any) => {
         <h2 class="page-heading-1 mb-2">{{ periodeInfo.nama_psb }}</h2>
         <h1 class="text-lg font-light">Rekap <span class="font-semibold text-orange-200 tracking-normal">Pendaftar</span></h1>
       </div>
-      <NuxtLink to="/internal/psb" class="text-[10px] px-5 py-2 bg-white/5 border border-white/10 hover:bg-white/10 rounded-full transition-all uppercase tracking-widest font-bold">
-        ← Kembali
-      </NuxtLink>
+      <div class="flex justify-end gap-2 w-full md:w-auto">
+        <NuxtLink to="/internal" class="glass-card btn-head">Dashboard</NuxtLink>
+        <NuxtLink to="/internal/psb" class="glass-card btn-head">← Back</NuxtLink>
+      </div>
     </header>
 
     <div class="glass-card rounded-xl p-2 md:py-4 md:px-8 mb-6 border border-white/10 flex flex-col md:flex-row gap-3 md:gap-4 items-center">

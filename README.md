@@ -1,9 +1,17 @@
-SINTAS AL- MATLAB
-Sistem Integrasi Data Santri Matlabus Salik
-
+SINTAS AL- MATLAB ( Sistem Integrasi Data Santri PP Matlabus Salik )
 ------------------------------------------------------------------
+  
+  author        : sintas.almatlab@gmail.com
+  skrip by      : AI
+  dev           : sintas-team (wayangireng@gmail.com, iritasenja@gmail.com, mantringenger@gmail.com)
+  layout tema   : Glassmorphism dan Dark Mode
 
-log update :
+/***************************************************************************************************/
+
+log update    :
+v1.5.2
+  - add UI data statistik PSB
+
 v1.5.1
   - add UI loading action
   - add UI loading action ke data audit & submit pendaftaran
