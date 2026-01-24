@@ -53,7 +53,6 @@ const jenjangData = computed(() => ({
 }))
 
 // Konfigurasi Chart Kabupaten (Horizontal Bar)
-// Konfigurasi Chart Kabupaten (Horizontal Bar)
 const kabupatenData = computed(() => {
   // Pastikan stats ada dan memiliki data kabupaten
   const kabEntries = stats.value?.kabupaten ? Object.entries(stats.value.kabupaten) : []
@@ -80,7 +79,7 @@ const kabupatenData = computed(() => {
     <header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
       <div>
         <h2 class="page-heading-1 mb-2">{{ periodeInfo.nama_psb || 'Periode PSB' }}</h2>
-        <h1 class="text-lg font-light tracking-tight text-white tracking-[0.1em]">
+        <h1 class="text-lg font-light tracking-tight text-white">
           {{ periodeInfo.first_header }} 
           <span class="font-semibold text-orange-200">{{ periodeInfo.mid_header }}</span> 
           {{ periodeInfo.last_header }}
@@ -122,10 +121,10 @@ const kabupatenData = computed(() => {
     <div class="relative overflow-hidden glass-card rounded-3xl p-8 border border-white/5 bg-gradient-to-br from-orange-600/20 to-transparent">
       <div class="relative z-10 text-center">
         <h4 class="text-xs font-semibold text-orange-300 uppercase tracking-[0.2em] mb-4">Total Pendaftar Terverifikasi</h4>
-        <div class="text-5xl md:text-7xl font-bold text-white tracking-tighter">
+        <div class="text-5xl md:text-7xl font-bold text-white tracking-[0.3em]">
           {{ stats?.total || 0 }}
         </div>
-        <div class="w-12 h-1 bg-orange-500/50 mx-auto mt-6 rounded-full"></div>
+        <div class="w-16 md:w-32 h-1 bg-orange-500/50 mx-auto mt-4 rounded-full"></div>
       </div>
       <div class="absolute -right-10 -bottom-10 text-[12rem] text-white/[0.03] font-black italic">PSB</div>
     </div>

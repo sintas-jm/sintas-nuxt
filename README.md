@@ -6,9 +6,11 @@ SINTAS AL- MATLAB ( Sistem Integrasi Data Santri PP Matlabus Salik )
   dev           : sintas-team (wayangireng@gmail.com, iritasenja@gmail.com, mantringenger@gmail.com)
   layout tema   : Glassmorphism dan Dark Mode
 
-/***************************************************************************************************/
 
 log update    :
+v1.6.0
+  - add UI master data
+
 v1.5.2
   - add UI data statistik PSB
 

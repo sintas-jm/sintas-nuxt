@@ -2,7 +2,19 @@
   <div class="w-full space-y-10 py-4">
     
     <section>
-      <div class="flex items-center gap-4 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 mb-8 items-center">
+        <label class="md:col-span-3 label-form">Jenjang Daftar *</label>
+        <div class="md:col-span-4">
+          <select v-model="localData.jenjang_daftar" class="form-input" 
+                  :class="{ '!border-red-500/40 bg-red-500/5': !localData.jenjang_daftar }">
+            <option value="" disabled>Pilih Jenjang</option>
+            <option value="Reguler">Reguler (Lulusan SD)</option>
+            <option value="Akselerasi">Akselerasi (Lulusan SMP)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 mb-8 pt-6 border-t border-white/5">
         <div class="w-10 h-10 rounded-xl bg-fuchsia-500/20 border border-fuchsia-500/30 flex items-center justify-center text-fuchsia-400 font-bold shadow-[0_0_15px_rgba(249,115,22,0.1)]">
           01
         </div>
@@ -25,6 +37,14 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 items-center">
+          <label class="md:col-span-3 label-form">NIK</label>
+          <div class="md:col-span-4">
+            <input type="text" v-model="localData.nik" @input="filterNumber('nik', 16)" 
+              class="form-input font-mono" placeholder="NIK (16 DIGIT)">
+          </div>
+        </div>
+        <!--
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 items-center">
           <label class="md:col-span-3 label-form">Jenjang Daftar *</label>
           <div class="md:col-span-6">
             <select v-model="localData.jenjang_daftar" class="form-input" 
@@ -35,6 +55,7 @@
             </select>
           </div>
         </div>
+        -->
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-6 items-center">
           <label class="md:col-span-3 label-form">Gender & Agama</label>
@@ -71,7 +92,8 @@
               <input type="text" v-model="localData.jumlah_saudara" @input="filterNumber('jumlah_saudara', 2)" class="w-14 bg-transparent text-center text-orange-300 font-bold outline-none" :class="{ 'text-red-500/40': !localData.jumlah_saudara }" />
               <span class="text-[10px] text-slate-400 uppercase">bersaudara</span>
             </div>
-            <select v-model="localData.status_keluarga" class="form-input flex-1 min-w-[150px]">
+            <select v-model="localData.status_keluarga" class="form-input flex-1 min-w-[150px]"
+                    :class="{ '!border-red-500/40 bg-red-500/5': !localData.status_keluarga }">
               <option value="Anak Kandung">Anak Kandung</option>
               <option value="Anak Angkat">Anak Angkat</option>
               <option value="Anak Asuh">Anak Asuh</option>
@@ -139,11 +161,11 @@
         </div>
         <div class="space-y-2">
           <label class="label-form">Tinggi (cm)</label>
-          <input type="text" v-model="localData.tinggi_badan" @input="filterNumber('tinggi_badan', 3)" class="form-input" placeholder="000">
+          <input type="text" v-model="localData.tinggi_badan" @input="filterNumber('tinggi_badan', 3)" class="form-input font-mono" placeholder="000">
         </div>
         <div class="space-y-2">
           <label class="label-form">Berat (kg)</label>
-          <input type="text" v-model="localData.berat_badan" @input="filterNumber('berat_badan', 3)" class="form-input" placeholder="00">
+          <input type="text" v-model="localData.berat_badan" @input="filterNumber('berat_badan', 3)" class="form-input font-mono" placeholder="00">
         </div>
       </div>
 
@@ -183,6 +205,7 @@ const maxDateSantri = computed(() => `${new Date().getFullYear() - 11}-12-31`)
 // --- VALIDATION SCHEMA (ZOD) ---
 const santriSchema = z.object({
   nama_lengkap: z.string().min(3, "Nama lengkap minimal 3 karakter"),
+  nik: z.string().optional().refine(val => !val || val.length === 16, {message: "NIK harus 16 digit"}),
   jenjang_daftar: z.string().min(1, "Pilih jenjang pendaftaran"),
   jenis_kelamin: z.string().min(1, "Pilih jenis kelamin"),
   agama: z.string().min(1, "Agama wajib diisi"),
@@ -194,6 +217,7 @@ const santriSchema = z.object({
   // Gunakan coerce agar Zod otomatis mengubah string/number jadi string sebelum dicheck
   anak_ke: z.coerce.string().min(1, "Input jumlah anak"),
   jumlah_saudara: z.coerce.string().min(1, "Input jumlah saudara"),
+  status_keluarga: z.string().min(1, "Mohon isi field status anak"),
   
   alamat: z.string().min(5, "Alamat minimal 5 karakter"),
   desa: z.string().min(1, "Desa wajib diisi"),

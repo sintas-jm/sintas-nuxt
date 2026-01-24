@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     // Ambil data settings terbaru dari GAS
     const response: any = await $fetch(`${config.gasUrlBackend}?action=getSettings`)
     
-    // Ambil PIN dari baris 5 yang sudah kita set di GAS tadi
+    // Ambil PIN
     const correctPin = response.settings.internalPin?.toString()
 
     if (body.pin === correctPin) {

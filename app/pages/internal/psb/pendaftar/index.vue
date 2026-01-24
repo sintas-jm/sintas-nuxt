@@ -37,8 +37,8 @@ onMounted(async () => {
 
 const getStatusClass = (status: string) => {
   const s = (status || '').toUpperCase()
-  if (s.includes('DITERIMA')) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-  if (s.includes('DAFTAR ULANG')) return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+  if (s.includes('Data Diterima')) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+  if (s.includes('Lengkapi Data Ketika Daftar Ulang')) return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
   return 'bg-amber-500/10 text-amber-400 border-amber-500/20'
 }
 
@@ -65,14 +65,12 @@ const handlePrint = (item: any) => {
     </header>
 
     <div class="glass-card rounded-xl p-2 md:py-4 md:px-8 mb-6 border border-white/10 flex flex-col md:flex-row gap-3 md:gap-4 items-center">
-      
       <div class="w-full md:flex-1 relative">
         <input v-model="search" type="text" placeholder="Cari Nama atau No. Registrasi..." 
           class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-orange-500/50 transition-all">
       </div>
 
       <div class="flex gap-2 w-full md:w-auto md:flex-[1]">
-        
         <select v-model="filterJenjang" class="flex-1 bg-black/20 border border-white/10 rounded-xl px-3 py-3 text-xs text-slate-100 focus:outline-none focus:border-orange-500/50 min-w-0">
           <option value="">Semua Jenjang</option> 
           <option value="Reguler">Reguler</option>

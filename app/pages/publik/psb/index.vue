@@ -80,7 +80,7 @@ const kabupatenData = computed(() => {
     <header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
       <div>
         <h2 class="page-heading-1 mb-2">{{ periodeInfo.nama_psb || 'Periode PSB' }}</h2>
-        <h1 class="text-lg font-light tracking-tight text-white tracking-[0.1em]">
+        <h1 class="text-lg font-light tracking-tight text-white">
           {{ periodeInfo.first_header }} 
           <span class="font-semibold text-orange-200">{{ periodeInfo.mid_header }}</span> 
           {{ periodeInfo.last_header }}

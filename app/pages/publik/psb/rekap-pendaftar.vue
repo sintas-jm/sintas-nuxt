@@ -37,8 +37,8 @@ onMounted(async () => {
 
 const getStatusClass = (status: string) => {
   const s = (status || '').toUpperCase()
-  if (s.includes('DITERIMA')) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-  if (s.includes('DAFTAR ULANG')) return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+  if (s.includes('Data Diterima')) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+  if (s.includes('Lengkapi Data Ketika Daftar Ulang')) return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
   return 'bg-amber-500/10 text-amber-400 border-amber-500/20'
 }
 
@@ -86,7 +86,7 @@ const handlePrint = (item: any) => {
       </div>
     </div>
 
-<div class="space-y-3">
+    <div class="space-y-3">
       <div v-if="filteredPendaftar.length === 0" class="text-center py-20 glass-card rounded-xl border border-white/5">
         <p class="text-slate-500 text-sm italic">Data pendaftar tidak ditemukan...</p>
       </div>

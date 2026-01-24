@@ -42,6 +42,25 @@ const formatDateForInput = (dateVal: any) => {
   }
 }
 
+const formatDateFriendly = (dateVal: any) => {
+  if (!dateVal) return '-'
+  try {
+    const d = new Date(dateVal)
+    if (isNaN(d.getTime())) return dateVal // Fallback ke teks asli jika gagal parse
+    
+    return new Intl.DateTimeFormat('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(d).replace(/\./g, ':') // Mengganti titik pemisah jam menjadi titik dua
+  } catch (e) {
+    return dateVal
+  }
+}
+
 onMounted(async () => {
   const id = route.params.id
   
@@ -67,7 +86,7 @@ onMounted(async () => {
     }
 
     const fieldsToString = [
-      'no_kk', 'nisn', 'anak_ke', 'jumlah_saudara', 'tinggi_badan', 'berat_badan', 'kode_pos', 
+      'no_kk', 'nik', 'nisn', 'anak_ke', 'jumlah_saudara', 'tinggi_badan', 'berat_badan', 'kode_pos', 
       'nik_ayah', 'nik_ibu', 'kode_pos_ortu', 'penghasilan_bulanan', 'hp_ayah', 'hp_ibu', 'hp_informasi', 'tahun_lulus', 'telp_rumah',
       'kode_pos_wali', 'hp_wali', 'telp_rumah_wali'
     ]
@@ -199,13 +218,18 @@ const handleUpdate = async () => {
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="space-y-2">
-            <label class="label-form">Status Pendaftaran</label>
-            <select v-model="formData.status_pendaftaran" class="input-style !border-orange-500/30">
-              <option value="PROSES VERIFIKASI">PROSES VERIFIKASI</option>
-              <option value="DITERIMA">DITERIMA</option>
-              <option value="DAFTAR ULANG">DAFTAR ULANG</option>
-              <option value="CADANGAN">CADANGAN</option>
-              <option value="TIDAK DITERIMA">TIDAK DITERIMA</option>
+            <label class="label-form">Update Status Pendaftaran 
+              <span v-if="formData.status_pendaftaran" class="text-[10px] text-orange-300 normal-case italic">(Saat ini: {{ formData.status_pendaftaran }})</span>
+            </label>
+            <select 
+              v-model="formData.status_pendaftaran" 
+              class="input-style !border-orange-500/30"
+              :class="{ '!border-red-500/50 bg-red-500/5': !formData.status_pendaftaran }"
+            >
+              <option value="" disabled selected>Pilih Status Terbaru</option>
+              <option value="Proses Verifikasi">Proses Verifikasi</option>
+              <option value="Data Diterima">Data Diterima</option>
+              <option value="Lengkapi Data Ketika Daftar Ulang">Lengkapi Data Ketika Daftar Ulang</option>
             </select>
           </div>
 
@@ -231,8 +255,13 @@ const handleUpdate = async () => {
           </div>
         </div>
         
-        <div v-if="formData.updated_at" class="mt-4 text-[10px] text-slate-500 italic">
-          Last Edit: {{ formData.updated_at }}
+        <div v-if="formData.updated_at" class="mt-4 text-[10px] text-slate-400 flex items-center gap-2">
+          <span class="inline-block w-2 h-2 rounded-full bg-slate-400"></span>
+          <span>
+            Terakhir diperbarui : 
+            <span class="text-orange-200 font-medium italic">{{ formatDateFriendly(formData.updated_at) }} &nbsp;</span>
+            <span class="text-orange-400 font-medium italic">oleh {{ formData.updated_by || 'Sistem' }}</span>
+          </span>
         </div>
       </div>
 

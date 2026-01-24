@@ -31,7 +31,7 @@ const staffName = ref('Kakak ...') // Nanti bisa dinamis
       <NuxtLink to="/internal/jadwal/piket-imam" 
         class="group p-3 md:p-4 glass-card btn-hover rounded-xl transition-all duration-500 relative overflow-hidden block">
         <div class="relative z-10 flex items-start gap-5"> 
-          <div class="shrink-0 w-12 h-12 bg-orange-500/10 text-green-400 border border-orange-500/20 rounded-xl flex items-center justify-center text-2xl shadow-xl group-hover:scale-110 transition-transform">
+          <div class="shrink-0 w-12 h-12 bg-green-500/10 text-green-400 border border-green-500/20 rounded-xl flex items-center justify-center text-2xl shadow-xl group-hover:scale-110 transition-transform">
             🕌
           </div>
           <div>
@@ -40,6 +40,20 @@ const staffName = ref('Kakak ...') // Nanti bisa dinamis
           </div>
         </div>
         <div class="absolute -right-2 -bottom-2 text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">🕌</div>
+      </NuxtLink>
+
+      <NuxtLink to="/internal/santri" 
+        class="group p-3 md:p-4 glass-card btn-hover rounded-xl transition-all duration-500 relative overflow-hidden block">
+        <div class="relative z-10 flex items-start gap-5"> 
+          <div class="shrink-0 w-12 h-12 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl flex items-center justify-center text-2xl shadow-xl group-hover:scale-110 transition-transform">
+            👥
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-1 text-slate-200">Data Santri</h3>
+            <p class="text-slate-400 text-xs leading-relaxed tracking-wide">Master informasi data santri.</p>
+          </div>
+        </div>
+        <div class="absolute -right-2 -bottom-2 text-8xl opacity-[0.03] group-hover:opacity-[0.07] transition-opacity">📚</div>
       </NuxtLink>
 
       <div class="p-4 glass-card opacity-50 rounded-xl relative overflow-hidden cursor-not-allowed">

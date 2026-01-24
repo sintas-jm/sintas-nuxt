@@ -63,9 +63,10 @@ const steps = [
     // IDENTITAS PENDAFTARAN (Auto/System)
     id_pendaftar: '', 
     id_psb: '',
-    status_pendaftaran: 'menunggu konfirmasi',
+    status_pendaftaran: 'Menunggu konfirmasi',
     
     // DATA CALON SANTRI
+    nik: '',
     jenjang_daftar: '',
     nama_lengkap: '',
     tempat_lahir: '',

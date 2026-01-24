@@ -37,3 +37,45 @@ export default defineEventHandler(async (event) => {
     }
   }
 })
+
+/**
+
+// server/api/pendaftaran.post.ts
+export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
+  
+  try {
+    const body = await readBody(event)
+
+    // Fallback: Pastikan minimal ada nama_lengkap (validasi basic)
+    if (!body.nama_lengkap) {
+      throw createError({ statusCode: 400, statusMessage: 'Nama wajib diisi' })
+    }
+
+    // Pembersihan otomatis: Ubah semua tipe data ke String agar GAS tidak error
+    const sanitizedBody = Object.fromEntries(
+      Object.entries(body).map(([key, val]) => [
+        key, 
+        val === null || val === undefined ? "" : String(val)
+      ])
+    )
+
+    // Kirim langsung ke GAS
+    return await $fetch(config.gasUrlBackend, {
+      method: 'POST',
+      body: {
+        action: 'submitPendaftaran',
+        ...sanitizedBody 
+      },
+    })
+
+  } catch (error: any) {
+    console.error('API Error:', error)
+    return {
+      success: false,
+      message: error.statusMessage || error.message || 'Gagal mengirim data.'
+    }
+  }
+})
+
+ */
