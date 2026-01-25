@@ -36,9 +36,9 @@ onMounted(async () => {
 })
 
 const getStatusClass = (status: string) => {
-  const s = (status || '').toUpperCase()
-  if (s.includes('DATA DITERIMA')) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-  if (s.includes('LENGKAPI DATA KETIKA DAFTAR ULANG')) return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+  const s = (status || '')
+  if (s.includes('Data Diterima')) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+  if (s.includes('Lengkapi Data Ketika Daftar Ulang')) return 'bg-blue-500/10 text-blue-400 border-blue-500/20'
   return 'bg-amber-500/10 text-amber-400 border-amber-500/20'
 }
 
@@ -107,7 +107,7 @@ const handlePrint = (item: any) => {
             <div class="flex flex-col gap-1.5">
               <span class="text-[11px] text-slate-300 font-mono leading-none truncate">{{ item.id_pendaftar }}</span>
               <div class="flex md:hidden">
-                <span :class="['px-2 py-0.5 rounded text-[9px] font-bold border uppercase tracking-tighter shadow-sm', getStatusClass(item.status_pendaftaran)]">
+                <span :class="['px-2 py-0.5 rounded text-[9px] font-bold uppercase border tracking-tighter shadow-sm', getStatusClass(item.status_pendaftaran)]">
                   {{ item.status_pendaftaran || 'Proses Verifikasi' }}
                 </span>
               </div>

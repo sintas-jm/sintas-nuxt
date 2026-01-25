@@ -27,6 +27,14 @@ const logout = () => {
             </svg>
             <span class="hidden md:inline">Portal Publik</span>
           </NuxtLink>
+
+          <NuxtLink to="/internal" 
+            class="flex glass-card btn-hover items-center gap-2 text-[10px] px-3 py-2 rounded-lg md:rounded-full tracking-widest text-slate-400 hover:text-orange-400 uppercase transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            <span class="hidden md:inline">Dashboard</span>
+          </NuxtLink>
           
           <button v-if="authCookie" @click="logout" 
             class="flex items-center gap-2 px-3 md:px-4 py-2 border border-red-900/50 rounded-lg md:rounded-full bg-red-900/20 text-red-400 hover:bg-red-900/40 hover:border-red-500/50 transition-all duration-300 hover:-translate-y-1">

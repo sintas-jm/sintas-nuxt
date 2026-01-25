@@ -6,3 +6,5 @@ export default defineEventHandler(async (event) => {
   const data = await $fetch(`${config.gasUrlBackend}?action=getSettings`)
   return data
 })
+
+// setting halaman utama linktree
