@@ -1,29 +1,41 @@
 <script setup>
-definePageMeta({ layout: 'internal' })
+definePageMeta({ layout: 'linktree' })
 
-const pinInput = ref('')
+const passwordInput = ref('')
 const isError = ref(false)
 const isLoading = ref(false)
-const authCookie = useCookie('auth_pin', { maxAge: 60 * 60 * 12 }) // Login bertahan 12 jam
+const errorMsg = ref('')
+
+// 1. Definisikan Cookie untuk Auth
+const authCookie = useCookie('auth_pin', {
+  maxAge: 60 * 60 * 24, // Berlaku 24 Jam
+  path: '/',           // Wajib agar bisa dibaca di folder /internal
+  sameSite: 'lax'
+})
 
 const handleLogin = async () => {
-  if (!pinInput.value) return
+  if (!passwordInput.value || isLoading.value) return
+  
   isLoading.value = true
   isError.value = false
 
   try {
     const data = await $fetch('/api/auth', {
       method: 'POST',
-      body: { pin: pinInput.value }
+      body: { password: passwordInput.value }
     })
 
     if (data.success) {
-      authCookie.value = pinInput.value
-      navigateTo('/internal')
+      // 2. Simpan password (atau token dari server jika ada) ke cookie
+      authCookie.value = passwordInput.value
+      
+      // 3. Gunakan navigateTo agar lebih "Nuxt"
+      await navigateTo('/internal')
     }
   } catch (err) {
     isError.value = true
-    pinInput.value = ''
+    errorMsg.value = err.data?.message || 'Akses Ditolak'
+    passwordInput.value = ''
   } finally {
     isLoading.value = false
   }
@@ -41,26 +53,30 @@ const handleLogin = async () => {
       <p class="text-slate-400 text-xs mb-10 tracking-[0.2em] uppercase">Sintas Security System</p>
       
       <div class="space-y-6">
-        <input v-model="pinInput" type="password" placeholder="Masukkan PIN" 
+        <input 
+          v-model="passwordInput" 
+          type="password"
+          @keyup.enter="handleLogin"
+          :disabled="isLoading"
+          placeholder="Masukkan Password"
           class="w-full bg-black/40 border border-orange-900/40 rounded-2xl p-4 text-center text-xl tracking-[0.5em] focus:border-orange-500 outline-none transition-all placeholder:text-[10px] placeholder:tracking-widest"
-          @keyup.enter="handleLogin" :disabled="isLoading">
-        
-        <div v-if="isError" class="text-red-400 text-[10px] uppercase tracking-widest animate-shake">
-          ⚠️ PIN tidak sesuai
-        </div>
-        
-        <!--
-        <button @click="handleLogin" :disabled="isLoading"
-          class="w-full bg-orange-700/10 border border-orange-700/50 text-slate-300 font-bold py-4 rounded-2xl hover:border-1 hover:border-orange-500/50 hover:shadow-orange-700/30 hover:scale-105 hover:bg-orange-500/40 transition-all shadow-lg shadow-orange-950/40 disabled:opacity-50">
-          {{ isLoading ? 'MENGECEK...' : 'MASUK' }}
-        </button>
-        -->
+        />
 
+        <p v-if="isError" class="text-red-400 text-[10px] uppercase tracking-widest animate-shake">
+          ⚠️ {{ errorMsg }}
+        </p>
+        
         <button @click="handleLogin" :disabled="isLoading"
-          class="w-full bg-gradient-to-r from-orange-600/60 to-orange-400/60 hover:from-orange-800/70 hover:to-orange-500/70   text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-orange-950/40 hover:scale-95 hover:text-slate-200/90 disabled:opacity-50">
-          {{ isLoading ? 'VERIFIKASI...' : 'MASUK' }}
+          class="w-full bg-gradient-to-r from-orange-600/60 to-orange-400/60 hover:from-orange-800/70 hover:to-orange-500/70 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-orange-950/40 hover:scale-95 hover:text-slate-200/90 disabled:opacity-50">
+          {{ isLoading ? 'Memproses...' : 'Verifikasi Akses' }}
         </button>
       </div>
+      
+    </div>
+    <div>
+      <NuxtLink to="/" class="w-full flex items-center justify-center gap-2 py-6 text-[11px] text-slate-400 hover:text-orange-400 transition-all uppercase tracking-widest">
+      ← Kembali
+      </NuxtLink>
     </div>
   </div>
 </template>

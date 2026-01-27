@@ -7,6 +7,7 @@ const staffName = ref('Kakak ...') // Nanti bisa dinamis
 </script>
 
 <template>
+  
   <div>
     <header class="mb-8">
       <h2 class="text-orange-400/80 text-[11px] font-bold tracking-[0.4em] uppercase mb-2">Pusat Kendali</h2>
@@ -60,7 +61,7 @@ const staffName = ref('Kakak ...') // Nanti bisa dinamis
         class="group p-3 md:p-4 glass-card btn-hover rounded-xl transition-all duration-500 relative overflow-hidden block">
         <div class="relative z-10 flex items-start gap-5"> 
           <div class="shrink-0 w-12 h-12 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl flex items-center justify-center text-2xl shadow-xl group-hover:scale-110 transition-transform">
-            🏢
+            🧩
           </div>
           <div>
             <h3 class="text-lg font-semibold mb-1 text-slate-200">OP3</h3>
@@ -83,4 +84,5 @@ const staffName = ref('Kakak ...') // Nanti bisa dinamis
       </div>
     </div>
   </div>
+  
 </template>

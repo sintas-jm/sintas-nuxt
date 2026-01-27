@@ -108,7 +108,6 @@ const display = (val: any) => val || '-'
           <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
         <span class="text-[10px] font-black uppercase tracking-widest opacity-40">Foto Belum Ada</span>
-        <span class="text-[9px] mt-1 text-orange-400/60 font-bold uppercase">Klik Untuk Unggah</span>
       </div>
 
       <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

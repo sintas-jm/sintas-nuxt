@@ -1,14 +1,22 @@
-SINTAS AL- MATLAB ( Sistem Integrasi Data Santri PP Matlabus Salik )
+SINTAS AL- MATLAB (Sistem Integrasi Data Santri PP Matlabus Salik )
 ------------------------------------------------------------------
-  
-  author          : sintas.almatlab@gmail.com
-  code            : by AI
-  dev             : sintas-team (wayangireng@gmail.com, iritasenja@gmail.com, mantringenger@gmail.com)
-  layout theme    : glassmorphism dark mode
-  database        : spreadsheet
 
+
+- author          : sintas.almatlab@gmail.com
+- code            : by AI
+- dev             : sintas-team (wayangireng@gmail.com, iritasenja@gmail.com, mantringenger@gmail.com)
+- layout theme    : glassmorphism dark mode
+- database        : spreadsheet
 
 log update    :
+v1.7.3  |  Jan 28, 2026
+  - perbaikan login
+
+v1.7.2  |  Jan 26, 2026
+  - perbaikan fitur UI penempatan dan UX penempatan
+
+v1.7.1  |  Jan 26, 2026
+  - fitur penempatan struktur organisasi 
 
 v1.6.1  |  Jan 24, 2026
   - fitur tambah dan ganti foto 

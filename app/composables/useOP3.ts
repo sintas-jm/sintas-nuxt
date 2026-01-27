@@ -27,32 +27,76 @@ export const useOP3 = () => {
   }
 
   // Update occupiedIds agar menggabungkan Database + Keranjang + Draft
-  const occupiedIds = computed(() => {
-    const ids = new Set<string>()
+  const occupiedStatus = computed(() => {
+    const statusMap = new Map<string, 'database' | 'keranjang' | 'draft'>();
     
-    // 1. Dari Database (Hasil Simpan Sebelumnya)
-    databaseOccupied.value.forEach(item => ids.add(item.id))
+    const listUmum = masterData.value?.pendamping_pa_pi || []
+    const isKebal = (name: string) => listUmum.includes(name)
 
-    // 2. Dari Keranjang (Yang belum disubmit)
-    keranjang.value.forEach(item => {
-      item.personalia.forEach((p: any) => ids.add(p.id_santri))
-      item.pendamping.forEach((name: string) => ids.add(name))
+    // 1. Database (Label: Menjabat)
+    databaseOccupied.value.forEach(item => {
+      if (!isKebal(item.id)) statusMap.set(item.id, 'database')
     })
 
-    // 3. Dari yang sedang dirakit (Draft)
-    drafting.value.personalia.forEach(p => ids.add(p.id_santri))
-    drafting.value.pendamping.forEach(name => ids.add(name))
+    // 2. Keranjang (Label: Dicalonkan)
+    keranjang.value.forEach(item => {
+      item.personalia.forEach((p: any) => statusMap.set(p.id_santri, 'keranjang'))
+      item.pendamping.forEach((name: string) => {
+        if (!isKebal(name)) statusMap.set(name, 'keranjang')
+      })
+    })
 
-    return ids
+    // 3. Draft (Label: Dicalonkan)
+    drafting.value.personalia.forEach((p: any) => statusMap.set(p.id_santri, 'draft'))
+    drafting.value.pendamping.forEach((name: string) => {
+      if (!isKebal(name)) statusMap.set(name, 'draft')
+    })
+
+    return statusMap
+  })
+
+  // Update dbJabatanTracks di useOP3.ts
+  const dbJabatanTracks = computed(() => {
+    if (!masterData.value || !databaseOccupied.value) return new Set()
+
+    const activeOrg = masterData.value?.settings?.find((s: any) => s.kategori === kategori.value)
+    const activeOrgId = activeOrg?.id_org
+    
+    const tracks = new Set()
+    databaseOccupied.value.forEach(item => {
+      // Pakai key 'nama_jabatan' sesuai header spreadsheet
+      if (item.id_org === activeOrgId && item.nama_jabatan) {
+        tracks.add(`${item.id_org}-${item.nama_jabatan}`)
+      }
+    })
+    
+    return tracks
   })
 
   // Fungsi untuk mengubah ID Drive menjadi URL Gambar yang bisa ditampilkan
-  const getImageUrl = (id: string) => {
-    if (!id || id === '-' || id.startsWith('http')) return id || '/img/placeholder-user.png'
-    
-    // Format link thumbnail Google Drive agar bisa di-render browser
+  const getImageUrl = (id: string): string => {
+    // Pakai string kosong "" agar TypeScript bahagia
+    if (!id || id === '-' || id === '') return "" 
+    if (id.startsWith('http')) return id
     return `https://drive.google.com/thumbnail?id=${id}&sz=s400`
   }
+  /**
+  Kadang di database ada ID-nya, tapi filenya sudah dihapus di Drive. Agar tidak muncul ikon "gambar pecah" bawaan browser, kita bisa tambahkan fungsi v-if yang lebih cerdas atau menggunakan event @error.
+  */
+
+  // stats progress bar
+  const stats = computed(() => {
+    if (!masterData.value) return { total: 0, filled: 0, percent: 0 }
+    
+    const list = kategori.value === 'pa' ? masterData.value.jabatan_pa : masterData.value.jabatan_pi
+    const total = list?.length || 0
+    
+    // Hitung jabatan unik yang sudah ada di DATABASE (dbJabatanNames dari langkah sebelumnya)
+    const filled = dbJabatanTracks.value.size
+    const percent = total > 0 ? Math.round((filled / total) * 100) : 0
+    
+    return { total, filled, percent }
+  })
 
   const addToDraft = (person: any, type: 'personalia' | 'pendamping') => {
     if (type === 'personalia') {
@@ -112,6 +156,7 @@ export const useOP3 = () => {
 
       if (res.success) {
         keranjang.value = [] // Reset keranjang setelah sukses
+        await fetchSettings()  // refresh / reset data dari database setelah simpan berhasil
         return { success: true, message: res.message }
       }
       return { success: false, message: res.message }
@@ -123,7 +168,7 @@ export const useOP3 = () => {
   }
 
   return {
-    kategori, masterData, drafting, keranjang, loading, occupiedIds, isDraftValid, getImageUrl,
-    fetchSettings, addToDraft, pushToKeranjang, simpanKeDatabase
+    kategori, masterData, drafting, keranjang, loading, occupiedStatus, isDraftValid, dbJabatanTracks, stats,
+    getImageUrl, fetchSettings, addToDraft, pushToKeranjang, simpanKeDatabase
   }
 }

@@ -1,9 +1,10 @@
 <template>
   <div>
     <GlobalLoading />
+    <TheToast />
+    
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <TheToast />
   </div>
 </template>

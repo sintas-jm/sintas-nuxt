@@ -18,7 +18,8 @@ export default defineEventHandler(async (event) => {
       nama_org: r[1],
       kategori: r[2],
       tahun: r[3],
-      aktif: String(r[4]).toUpperCase() === 'TRUE'
+      aktif: String(r[4]).toUpperCase() === 'TRUE',
+      note_status:r[5]
     }))
 
     // 2. Parsing Master (Data mulai Baris 8)
